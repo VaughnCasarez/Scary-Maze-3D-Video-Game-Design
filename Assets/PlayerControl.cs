@@ -1,19 +1,24 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 public class PlayerControl : MonoBehaviour
 {
-    public float speed = 5f;
+    public float moveSpeed = 5f;
+    public float turnSpeed = 150f; 
     void Update()
     {
-        Vector3 move = Vector3.zero;
-        if (Keyboard.current.wKey.isPressed)
-            move += Vector3.forward;
-        if (Keyboard.current.sKey.isPressed)
-            move += Vector3.back;
+        //for cam and player
+        float move =  0f;
+        float turn  = 0f;
+        if (Keyboard.current.wKey.isPressed)  
+            move =1f; 
+        if (Keyboard.current.sKey.isPressed)  
+            move =-1f;
         if (Keyboard.current.aKey.isPressed)
-            move += Vector3.left;
+            turn =-1f;  
         if (Keyboard.current.dKey.isPressed)
-            move += Vector3.right;
-        transform.position += move * speed * Time.deltaTime;
+            turn =1f;
+        transform.Translate(Vector3.forward * move * moveSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.up * turn * turnSpeed * Time.deltaTime);
     }
 }
