@@ -54,5 +54,6 @@ MonoBehaviour:
   key_chance: 0.005
   floor: {fileID: 4325341918426565251}
   key_prefab: {fileID: 8784307974499645974, guid: 97637310df45eac46b12e6857cab60c0, type: 3}
-  gate_prefab: {fileID: 5063037613639234877, guid: 2d9d7c32981e7f84ab08e8eff8d47245, type: 3}
+  gate_prefab: {fileID: 658089914252131974, guid: 2d9d7c32981e7f84ab08e8eff8d47245, type: 3}
+  player_prefab: {fileID: 5455520029652980035, guid: defa906985d1400488f65c785ae0b4e6, type: 3}
   num_rooms: 0

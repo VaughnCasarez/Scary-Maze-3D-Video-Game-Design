@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Gate : MonoBehaviour
+public class WinDetection : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)
     {
@@ -9,7 +9,8 @@ public class Gate : MonoBehaviour
             PlayerControl player = other.gameObject.GetComponent<PlayerControl>();
             if (player.hasKey)
             {
-                this.transform.parent.gameObject.SetActive(false);
+                Time.timeScale = 0f;
+                Debug.Log("you win!");
             }
         }
     }
