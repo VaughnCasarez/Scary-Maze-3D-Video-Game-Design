@@ -3,11 +3,12 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     //temp script for water bullets
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Destroy(GameObject.FindGameObjectWithTag("Enemy"));
+            Debug.Log("collision");
+            Destroy(collision.gameObject);
         } 
         Destroy(gameObject);
     }

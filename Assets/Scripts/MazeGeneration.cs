@@ -18,17 +18,22 @@ public class MazeGeneration : MonoBehaviour
     [SerializeField] public int length = 25;
     [SerializeField] public int goalX = 13;
     [SerializeField] private float key_chance = 0.005f;
+    [SerializeField] private float pumpkin_chance = 0.05f;
+    [SerializeField] private int maxPumpkins = 3;
 
     [Header("Object References")]
     [SerializeField] private GameObject floor;
     [SerializeField] private GameObject key_prefab;
     [SerializeField] private GameObject gate_prefab;
+    [SerializeField] private GameObject player_prefab;
+    [SerializeField] private GameObject pumpkin_prefab;
 
     #region book-keeping
     private int[,] floor_map;
     [SerializeField] public Dictionary<int, List<int[]>> room_assignments;
     [SerializeField] public int num_rooms;
     private bool keyNotPlaced = true;
+    private int numPumpkins = 0;
     #endregion
 
     void Start()
@@ -314,12 +319,21 @@ public class MazeGeneration : MonoBehaviour
                     rend.material.color = Color.blue;
                     //if there aren't any walls around, attempt to spawn a treasure chest
                     if (keyNotPlaced && IsOpenSpace(row, col) && UnityEngine.Random.Range(0, 1f) < key_chance) {
-                        Vector3 pos = new Vector3(row + tileSize * 0.5f, 1f, col + tileSize * 0.5f); //tile center
+                        Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
                         Instantiate(key_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                         keyNotPlaced = false;
                     } else if (IsOpenSpace(row, col))
                     {
                         key_chance *= 3f;
+                        if (numPumpkins < maxPumpkins && UnityEngine.Random.Range(0, 1f) < pumpkin_chance)
+                        {
+                            Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
+                            Instantiate(pumpkin_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                            numPumpkins++;
+                        } else if (numPumpkins < maxPumpkins)
+                        {
+                            pumpkin_chance *= 2f;
+                        }
                     }
                 }
 
@@ -327,6 +341,8 @@ public class MazeGeneration : MonoBehaviour
                 {
                     curTile.transform.localScale = new Vector3 (tileSize, 0.25f, tileSize);
                     rend.material.color = Color.green;
+                    Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
+                    Instantiate(player_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                 } else if (row == goalX && col == length - 1)
                 {
                     curTile.transform.localScale = new Vector3 (tileSize, 0.25f, tileSize);
@@ -337,6 +353,7 @@ public class MazeGeneration : MonoBehaviour
                 curTile.transform.SetParent(this.gameObject.transform); 
             }
         } 
+        
     }
 
     //are there walls within a 5x5 centered at x, y?
