@@ -17,6 +17,7 @@ public class Key : MonoBehaviour
         {
             anim.ResetTrigger("fall");
             anim.SetTrigger("float");
+            c.gameObject.GetComponent<PlayerControl>().inKeyRange = true;
         }
     }
 
@@ -26,10 +27,11 @@ public class Key : MonoBehaviour
         {
             anim.ResetTrigger("float");
             anim.SetTrigger("fall");
+            c.gameObject.GetComponent<PlayerControl>().inKeyRange = false;
         }
     }
 
-    void CollectKey()
+    public void CollectKey()
     {
         Deactivate();
     }
