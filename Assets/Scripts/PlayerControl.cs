@@ -7,6 +7,11 @@ public class PlayerControl : MonoBehaviour
     public float turnSpeed = 150f; 
     public float shootSpeed = 10f;
 
+    public float doubleTime = 0f;
+    private bool isSprinting = false;
+    private bool isCrouching = false;
+
+
     public bool inKeyRange;
     public bool hasKey;
     private WaterGun gun;
@@ -21,6 +26,26 @@ public class PlayerControl : MonoBehaviour
         //for cam and player
         float move =  0f;
         float turn  = 0f;
+        //sprint double tap
+        if (Keyboard.current.wKey.wasPressedThisFrame){
+            if (Time.time - doubleTime < .3f){
+                isSprinting = true;
+            }
+            doubleTime = Time.time;
+        }
+        // crouching -L
+
+        if (Keyboard.current.lKey.wasPressedThisFrame){
+            isCrouching = !isCrouching;
+            if (isCrouching){
+                transform.localScale = new Vector3(1f, 0.5f, 1f);
+            } else {
+                transform.localScale = new Vector3(1f, 1f, 1f);
+            }
+        }
+        if (Keyboard.current.wKey.wasReleasedThisFrame){
+            isSprinting = false;
+        }
         if (Keyboard.current.wKey.isPressed)  
             move =1f; 
         if (Keyboard.current.sKey.isPressed)  
@@ -36,7 +61,17 @@ public class PlayerControl : MonoBehaviour
             key.CollectKey();
             hasKey = true;
         } 
-        transform.Translate(Vector3.forward * move * moveSpeed * Time.deltaTime);
+
+        float currentSpeed = moveSpeed;
+        if (isSprinting){
+            currentSpeed = 10f;
+        } 
+        if (isCrouching)
+        {
+            currentSpeed = 2f;
+        } 
+
+        transform.Translate(Vector3.forward * move * currentSpeed  * Time.deltaTime);
         transform.Rotate(Vector3.up * turn * turnSpeed * Time.deltaTime);
     }
 

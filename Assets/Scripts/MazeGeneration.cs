@@ -19,7 +19,9 @@ public class MazeGeneration : MonoBehaviour
     [SerializeField] public int goalX = 13;
     [SerializeField] private float key_chance = 0.005f;
     [SerializeField] private float pumpkin_chance = 0.05f;
+    [SerializeField] private float scarecrow_chance = 0.05f;
     [SerializeField] private int maxPumpkins = 3;
+    [SerializeField] private int maxScarecrows = 3;
 
     [Header("Object References")]
     [SerializeField] private GameObject floor;
@@ -27,13 +29,14 @@ public class MazeGeneration : MonoBehaviour
     [SerializeField] private GameObject gate_prefab;
     [SerializeField] private GameObject player_prefab;
     [SerializeField] private GameObject pumpkin_prefab;
-
+    [SerializeField] private GameObject scarecrow_prefab;
     #region book-keeping
     private int[,] floor_map;
     [SerializeField] public Dictionary<int, List<int[]>> room_assignments;
     [SerializeField] public int num_rooms;
     private bool keyNotPlaced = true;
     private int numPumpkins = 0;
+    private int numScarecrows = 0;
     #endregion
 
     void Start()
@@ -325,14 +328,31 @@ public class MazeGeneration : MonoBehaviour
                     } else if (IsOpenSpace(row, col))
                     {
                         key_chance *= 3f;
+                        // Pumpkin generation
                         if (numPumpkins < maxPumpkins && UnityEngine.Random.Range(0, 1f) < pumpkin_chance)
                         {
                             Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
                             Instantiate(pumpkin_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                             numPumpkins++;
-                        } else if (numPumpkins < maxPumpkins)
+                        } 
+                        // else Scarecrow generation
+                        else if (numScarecrows < maxScarecrows && UnityEngine.Random.Range(0, 1f) < scarecrow_chance)
                         {
-                            pumpkin_chance *= 2f;
+                            Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
+                            Instantiate(scarecrow_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                            numScarecrows++;
+                        }
+                        // Increase chances if neither was placed
+                        else 
+                        {
+                            if (numPumpkins < maxPumpkins)
+                            {
+                                pumpkin_chance *= 2f;
+                            }
+                            if (numScarecrows < maxScarecrows)
+                            {
+                                scarecrow_chance *= 2f;
+                            }
                         }
                     }
                 }
