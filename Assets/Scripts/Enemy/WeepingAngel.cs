@@ -8,6 +8,10 @@ public class WeepingAngel : MonoBehaviour
     
     private GameObject player;
     private Camera playerCamera;
+
+    // State machine
+    public enum AngelState { SeekPlayer, Stop }
+    public AngelState currentState;
     
     void Start()
     {
@@ -20,19 +24,38 @@ public class WeepingAngel : MonoBehaviour
         }
         
         playerCamera = player.GetComponentInChildren<Camera>();
+        currentState = AngelState.SeekPlayer;
     }
 
     void Update()
     {
         if (player == null || playerCamera == null)
             return;
-                
-        // If not watched, move to player
-        if (!IsInPlayerLineOfSight())
+
+        if (IsInPlayerLineOfSight())
         {
-            Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
-            transform.position += directionToPlayer * moveSpeed * Time.deltaTime;
+            currentState = AngelState.Stop;
         }
+        else
+        {
+            currentState = AngelState.SeekPlayer;
+        }
+
+        switch(currentState)
+        {
+            case AngelState.SeekPlayer:
+                SeekPlayer();
+                break;
+            case AngelState.Stop:
+                // do nothing
+                break;
+        }
+    }
+
+    private void SeekPlayer()
+    {
+        Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
+        transform.position += directionToPlayer * moveSpeed * Time.deltaTime;
     }
     
     private bool IsInPlayerLineOfSight()
