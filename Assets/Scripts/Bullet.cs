@@ -5,10 +5,10 @@ public class Bullet : MonoBehaviour
     //temp script for water bullets
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.name.Contains("Pumpkin"))
         {
             Debug.Log("collision");
-            Destroy(collision.gameObject);
+            collision.gameObject.GetComponent<JackOLanternAI>().Stun();
         } 
         Destroy(gameObject);
     }
