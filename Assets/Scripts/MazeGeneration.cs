@@ -26,6 +26,8 @@ public class MazeGeneration : MonoBehaviour
 
     [Header("Object References")]
     [SerializeField] private GameObject floor;
+    [SerializeField] private GameObject grass_prefab;
+    [SerializeField] private GameObject corn_prefab;
     [SerializeField] private GameObject key_prefab;
     [SerializeField] private GameObject gate_prefab;
     [SerializeField] private GameObject player_prefab;
@@ -310,18 +312,45 @@ public class MazeGeneration : MonoBehaviour
        {
             for (int col = 0; col < length; col++)
             {   
-                GameObject curTile = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                curTile.name = "[" + row + ", " + col + "]";
-
-                curTile.transform.position = new Vector3 (row, tileSize / 2f, col);
-                Renderer rend = curTile.GetComponent<Renderer>();
+                if (row == goalX && col == 0)
+                {
+                    GameObject curGround = Instantiate(grass_prefab,  new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    curGround.name = "[" + row + ", " + col + "]";
+                    curGround.transform.SetParent(this.gameObject.transform); 
+                    curGround.layer = 3;
+                    curGround.transform.localScale = new Vector3 (tileSize, 0.25f, tileSize);
+                    Vector3 pos = new Vector3(row + tileSize, 1f, col + tileSize); //tile center
+                    Instantiate(player_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                } else if (row == goalX && col == length - 1)
+                {
+                    GameObject curGround = Instantiate(grass_prefab,  new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    curGround.name = "[" + row + ", " + col + "]";
+                    curGround.transform.SetParent(this.gameObject.transform); 
+                    curGround.layer = 3;
+                    
+                    curGround.transform.localScale = new Vector3 (tileSize, 1f, tileSize);
+                    Vector3 pos = new Vector3(row, 0.5f, col - tileSize * 0.5f); //tile center
+                    Instantiate(gate_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                    continue;
+                }
+                
                 if (floor_map[row, col] == -1) {
-                    rend.material.color = Color.red;
-                    curTile.transform.localScale = new Vector3 (tileSize, tileSize * 2f, tileSize);
+                    GameObject curCorn = Instantiate(corn_prefab, new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    curCorn.name = "[" + row + ", " + col + "]";
+                    curCorn.transform.SetParent(this.gameObject.transform); 
+                    curCorn.layer = 3;
+                    // curTile.transform.position = new Vector3 (row, tileSize / 2f, col);
+                    // Renderer rend = curTile.GetComponent<Renderer>();
+                    // rend.material.color = Color.red;
+                    // curTile.transform.localScale = new Vector3 (tileSize, tileSize * 2f, tileSize);
                 } else
                 {
-                    curTile.transform.localScale = new Vector3 (tileSize, 0.25f, tileSize);
-                    rend.material.color = Color.blue;
+                    GameObject curGround = Instantiate(grass_prefab,  new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    curGround.name = "[" + row + ", " + col + "]";
+                    curGround.transform.SetParent(this.gameObject.transform); 
+                    curGround.layer = 3;
+                    // curTile.transform.localScale = new Vector3 (tileSize, 0.25f, tileSize);
+                    // rend.material.color = Color.blue;
                     //if there aren't any walls around, attempt to spawn a treasure chest
                     if (keyNotPlaced && IsOpenSpace(row, col) && UnityEngine.Random.Range(0, 1f) < key_chance) {
                         Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
@@ -358,22 +387,8 @@ public class MazeGeneration : MonoBehaviour
                         }
                     }
                 }
-
-                if (row == goalX && col == 0)
-                {
-                    curTile.transform.localScale = new Vector3 (tileSize, 0.25f, tileSize);
-                    rend.material.color = Color.green;
-                    Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
-                    Instantiate(player_prefab, pos, Quaternion.LookRotation(Vector3.forward));
-                } else if (row == goalX && col == length - 1)
-                {
-                    curTile.transform.localScale = new Vector3 (tileSize, 0.25f, tileSize);
-                    rend.material.color = Color.green;
-                    Vector3 pos = new Vector3(row, 0.25f, col - tileSize * 0.5f); //tile center
-                    Instantiate(gate_prefab, pos, Quaternion.LookRotation(Vector3.forward));
-                }
-                curTile.transform.SetParent(this.gameObject.transform); 
-                curTile.layer = 3;
+                // curTile.transform.SetParent(this.gameObject.transform); 
+                // curTile.layer = 3;
             }
         } 
         
