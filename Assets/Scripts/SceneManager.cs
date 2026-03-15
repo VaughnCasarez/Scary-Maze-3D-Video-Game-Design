@@ -1,0 +1,65 @@
+using UnityEngine;
+
+public class SceneManager : MonoBehaviour
+{
+    public string game_scene_name;
+    public string main_menu_scene_name;
+    public GameObject instruction_panel;
+    public string win_lose_scene_name;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        if (instruction_panel != null)
+        {
+            instruction_panel.SetActive(false);
+        }
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void LoadGameScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(game_scene_name);
+    }
+
+    public void LoadInstructionScene()
+    {
+        ShowInstructionPanel();
+    }
+
+    public void ShowInstructionPanel()
+    {
+        if (instruction_panel != null)
+        {
+            instruction_panel.SetActive(true);
+        }
+    }
+
+    public void HideInstructionPanel()
+    {
+        if (instruction_panel != null)
+        {
+            instruction_panel.SetActive(false);
+        }
+    }
+
+    public void LoadWinLoseScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(win_lose_scene_name);
+    }
+
+    public void LoadMainMenuScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(main_menu_scene_name);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+}
