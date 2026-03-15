@@ -6,12 +6,12 @@ public class PlayerControl : MonoBehaviour
     public float moveSpeed = 5f;
     public float turnSpeed = 150f; 
     public float shootSpeed = 10f;
+    public bool seesScarecrow = false;
 
     public float doubleTime = 0f;
     private bool isSprinting = false;
     private bool isCrouching = false;
-
-
+    
     public bool inKeyRange;
     public bool hasKey;
     private WaterGun gun;
@@ -73,7 +73,21 @@ public class PlayerControl : MonoBehaviour
 
         transform.Translate(Vector3.forward * move * currentSpeed  * Time.deltaTime);
         transform.Rotate(Vector3.up * turn * turnSpeed * Time.deltaTime);
+
+        //CheckScarecrowRange();
     }
+
+    // private void CheckScarecrowRange()
+    // {
+    //     Vector3 rayStartPoint = transform.position + transform.forward * 0.5f;
+    //     Vector3 rayDirection = transform.forward;
+    //     Raycast hit;
+
+    //     if (Physics.Raycast(rayOrigin, rayDirection, out hit, 100f, 6))
+    //     {
+    //         seesScarecrow = true;
+    //     }
+    // }
 
     void OnCollisionEnter(Collision other)
     {

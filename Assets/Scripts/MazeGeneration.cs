@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.AI.Navigation;
 
 //Author: Arshiya Rahman
 //This script runs Cellular Automata rules to generate a floor plan
@@ -51,6 +52,7 @@ public class MazeGeneration : MonoBehaviour
         SmoothFloors();
         ConnectRooms();
         DrawMaze();
+        GetComponent<NavMeshSurface>().BuildNavMesh();
     }
 
     //initial placements of walls and floors
@@ -371,6 +373,7 @@ public class MazeGeneration : MonoBehaviour
                     Instantiate(gate_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                 }
                 curTile.transform.SetParent(this.gameObject.transform); 
+                curTile.layer = 3;
             }
         } 
         

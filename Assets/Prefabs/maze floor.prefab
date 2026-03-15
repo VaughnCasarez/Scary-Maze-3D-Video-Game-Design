@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6927242962984844330}
   - component: {fileID: 6384555432779833044}
+  - component: {fileID: 421391007354724878}
   m_Layer: 0
   m_Name: maze floor
   m_TagString: Untagged
@@ -60,6 +61,38 @@ MonoBehaviour:
   key_prefab: {fileID: 8784307974499645974, guid: 97637310df45eac46b12e6857cab60c0, type: 3}
   gate_prefab: {fileID: 658089914252131974, guid: 2d9d7c32981e7f84ab08e8eff8d47245, type: 3}
   player_prefab: {fileID: 5455520029652980035, guid: defa906985d1400488f65c785ae0b4e6, type: 3}
-  pumpkin_prefab: {fileID: 0}
+  pumpkin_prefab: {fileID: 4249628757518167691, guid: 986d20c9620832441bfb04fe5f3e2e07, type: 3}
   scarecrow_prefab: {fileID: 7142822975937438967, guid: 3d23a39973d034f48ae46197fa1b1871, type: 3}
   num_rooms: 0
+--- !u!114 &421391007354724878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4325341918426565251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  m_UseGeometry: 1
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.1
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 0}
+  m_BuildHeightMesh: 0
