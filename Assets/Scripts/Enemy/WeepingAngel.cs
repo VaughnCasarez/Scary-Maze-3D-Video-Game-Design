@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class WeepingAngel : MonoBehaviour
 {
@@ -6,8 +7,11 @@ public class WeepingAngel : MonoBehaviour
     [SerializeField] private float viewAngle = 60f;
     [SerializeField] private float moveSpeed = 3f;
     
+    private NavMeshAgent agent;
     private GameObject player;
     private Camera playerCamera;
+
+    private bool isActive;
 
     // State machine
     public enum AngelState { SeekPlayer, Stop }
@@ -15,6 +19,8 @@ public class WeepingAngel : MonoBehaviour
     
     void Start()
     {
+        agent = GetComponent<NavMeshAgent>();
+        agent.speed = moveSpeed; 
         player = GameObject.FindGameObjectWithTag("Player");
         
         if (player == null)
@@ -24,12 +30,12 @@ public class WeepingAngel : MonoBehaviour
         }
         
         playerCamera = player.GetComponentInChildren<Camera>();
-        currentState = AngelState.SeekPlayer;
+        currentState = AngelState.Stop;
     }
 
     void Update()
     {
-        if (player == null || playerCamera == null)
+        if (player == null || playerCamera == null|| !isActive)
             return;
 
         if (IsInPlayerLineOfSight())
@@ -55,31 +61,40 @@ public class WeepingAngel : MonoBehaviour
     private void SeekPlayer()
     {
         Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
-        transform.position += directionToPlayer * moveSpeed * Time.deltaTime;
+        //transform.position += directionToPlayer * moveSpeed * Time.deltaTime;
+        agent.SetDestination(player.transform.position);
     }
     
     private bool IsInPlayerLineOfSight()
     {
-        Vector3 directionToAngel = transform.position - playerCamera.transform.position;
+        Vector3 directionToAngel = transform.position - player.transform.position;
         float distToAngel = directionToAngel.magnitude;
         
         // If angel is too far or if not within the player's angle of view
         // Camera angle is a bit weird, maybe instead of playerCamera, should be player's center?
-        float angleToAngel = Vector3.Angle(playerCamera.transform.forward, directionToAngel);
+        float angleToAngel = Vector3.Angle(player.transform.forward, directionToAngel);
         if (distToAngel > detectionRange || angleToAngel > viewAngle)
             return false;
         
-        Vector3 origin = playerCamera.transform.position;
+        Vector3 origin = player.transform.position;
         Vector3 dir = directionToAngel.normalized;
         RaycastHit hit;
 
         // if player raycast hits angel
-        if (Physics.Raycast(origin, dir, out hit, distToAngel))
+        if (Physics.Raycast(origin, dir, out hit, distToAngel, this.gameObject.layer))
         {
             Debug.DrawLine(origin, hit.point, hit.collider.gameObject == gameObject ? Color.green : Color.red);
             return hit.collider.gameObject == gameObject;
         }
         Debug.DrawLine(origin, transform.position, Color.green);
         return true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            isActive = true;
+        }
     }
 }
