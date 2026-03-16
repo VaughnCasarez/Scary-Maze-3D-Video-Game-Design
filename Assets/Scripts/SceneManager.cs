@@ -24,6 +24,8 @@ public class SceneManager : MonoBehaviour
 
     public void LoadGameScene()
     {
+        Time.timeScale = 1f;
+        GameResultState.Clear();
         UnityEngine.SceneManagement.SceneManager.LoadScene(game_scene_name);
     }
 
