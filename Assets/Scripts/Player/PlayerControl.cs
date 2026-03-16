@@ -33,9 +33,12 @@ public class PlayerControl : MonoBehaviour
     private AudioSource backgroundAudioSource;
     private bool isWalkSoundPlaying;
     private bool hasEndedLevel;
+    private Animator anim;
 
     void Start()
     {
+        anim = GetComponent<Animator>();
+        anim.SetBool("isWalking", false);
         gun = transform.Find("gun").GetComponent<WaterGun>();
         key = GameObject.FindWithTag("Key").GetComponent<Key>();
 
@@ -57,7 +60,7 @@ public class PlayerControl : MonoBehaviour
         float move = 0f;
         float turn = 0f;
         //sprint double tap
-        if (Keyboard.current.wKey.wasPressedThisFrame)
+        if (Keyboard.current.shiftKey.wasPressedThisFrame)
         {
             if (Time.time - doubleTime < .3f)
             {
@@ -67,7 +70,7 @@ public class PlayerControl : MonoBehaviour
         }
         // crouching -L
 
-        if (Keyboard.current.lKey.wasPressedThisFrame)
+        if (Keyboard.current.ctrlKey.wasPressedThisFrame)
         {
             isCrouching = !isCrouching;
             if (isCrouching)
@@ -79,7 +82,7 @@ public class PlayerControl : MonoBehaviour
                 transform.localScale = new Vector3(1f, 1f, 1f);
             }
         }
-        if (Keyboard.current.wKey.wasReleasedThisFrame)
+        if (Keyboard.current.shiftKey.wasReleasedThisFrame)
         {
             isSprinting = false;
         }
@@ -113,7 +116,13 @@ public class PlayerControl : MonoBehaviour
         }
 
         HandleWalkAudio(move);
-
+        if (move != 0f)
+        {
+            anim.SetBool("isWalking", true);
+        } else
+        {
+            anim.SetBool("isWalking", false);
+        }
         transform.Translate(Vector3.forward * move * currentSpeed * Time.deltaTime);
         transform.Rotate(Vector3.up * turn * turnSpeed * Time.deltaTime);
 
