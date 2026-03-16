@@ -348,7 +348,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4325341918426565251, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: m_Name
-      value: maze floor
+      value: Maze
+      objectReference: {fileID: 0}
+    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
+      propertyPath: tileSize
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
+      propertyPath: key_chance
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: corn_prefab
@@ -360,20 +368,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: random_seed
-      value: 10
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
+      propertyPath: wall_chance
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: grass_prefab
       value: 
       objectReference: {fileID: 6496799340054847938, guid: 9583d2e3d2a4e4b499d2d7c5c4460a87, type: 3}
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
+      propertyPath: maxScarecrows
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: player_prefab
       value: 
       objectReference: {fileID: 5455520029652980035, guid: defa906985d1400488f65c785ae0b4e6, type: 3}
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
+      propertyPath: pumpkin_chance
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: pumpkin_prefab
       value: 
       objectReference: {fileID: 4249628757518167691, guid: 986d20c9620832441bfb04fe5f3e2e07, type: 3}
+    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
+      propertyPath: scarecrow_chance
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6927242962984844330, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: m_LocalScale.x
       value: 1

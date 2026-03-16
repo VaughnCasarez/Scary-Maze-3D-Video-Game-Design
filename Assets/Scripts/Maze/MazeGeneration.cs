@@ -339,21 +339,14 @@ public class MazeGeneration : MonoBehaviour
                     curCorn.name = "[" + row + ", " + col + "]";
                     curCorn.transform.SetParent(this.gameObject.transform); 
                     curCorn.layer = 3;
-                    // curTile.transform.position = new Vector3 (row, tileSize / 2f, col);
-                    // Renderer rend = curTile.GetComponent<Renderer>();
-                    // rend.material.color = Color.red;
-                    // curTile.transform.localScale = new Vector3 (tileSize, tileSize * 2f, tileSize);
                 } else
                 {
                     GameObject curGround = Instantiate(grass_prefab,  new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
                     curGround.name = "[" + row + ", " + col + "]";
                     curGround.transform.SetParent(this.gameObject.transform); 
                     curGround.layer = 3;
-                    // curTile.transform.localScale = new Vector3 (tileSize, 0.25f, tileSize);
-                    // rend.material.color = Color.blue;
-                    //if there aren't any walls around, attempt to spawn a treasure chest
                     if (keyNotPlaced && IsOpenSpace(row, col) && UnityEngine.Random.Range(0, 1f) < key_chance) {
-                        Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
+                        Vector3 pos = new Vector3(row + tileSize, 1f, col + tileSize); //tile center
                         Instantiate(key_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                         keyNotPlaced = false;
                     } else if (IsOpenSpace(row, col))
@@ -365,6 +358,7 @@ public class MazeGeneration : MonoBehaviour
                             Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
                             Instantiate(pumpkin_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                             numPumpkins++;
+                            pumpkin_chance /= 2f;
                         } 
                         // else Scarecrow generation
                         else if (numScarecrows < maxScarecrows && UnityEngine.Random.Range(0, 1f) < scarecrow_chance)
@@ -372,23 +366,22 @@ public class MazeGeneration : MonoBehaviour
                             Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
                             Instantiate(scarecrow_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                             numScarecrows++;
+                            scarecrow_chance /= 2f;
                         }
-                        // Increase chances if neither was placed
-                        else 
-                        {
-                            if (numPumpkins < maxPumpkins)
-                            {
-                                pumpkin_chance *= 2f;
-                            }
-                            if (numScarecrows < maxScarecrows)
-                            {
-                                scarecrow_chance *= 2f;
-                            }
-                        }
+                        // // Increase chances if neither was placed
+                        // else 
+                        // {
+                        //     if (numPumpkins < maxPumpkins)
+                        //     {
+                        //         pumpkin_chance *= 2f;
+                        //     }
+                        //     if (numScarecrows < maxScarecrows)
+                        //     {
+                        //         scarecrow_chance *= 2f;
+                        //     }
+                        // }
                     }
                 }
-                // curTile.transform.SetParent(this.gameObject.transform); 
-                // curTile.layer = 3;
             }
         } 
         
