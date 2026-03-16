@@ -8,6 +8,7 @@ public class WeepingAngel : MonoBehaviour
     [SerializeField] private float moveSpeed = 3f;
     
     private NavMeshAgent agent;
+    private Animator anim;
     private GameObject player;
     private Camera playerCamera;
 
@@ -21,6 +22,7 @@ public class WeepingAngel : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = moveSpeed; 
+        anim = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
         
         if (player == null)
@@ -40,10 +42,12 @@ public class WeepingAngel : MonoBehaviour
 
         if (IsInPlayerLineOfSight())
         {
+            anim.SetTrigger("idle");
             currentState = AngelState.Stop;
         }
         else
         {
+            anim.SetTrigger("walk");
             currentState = AngelState.SeekPlayer;
         }
 
@@ -53,7 +57,7 @@ public class WeepingAngel : MonoBehaviour
                 SeekPlayer();
                 break;
             case AngelState.Stop:
-                // do nothing
+                agent.velocity = Vector3.zero;
                 break;
         }
     }
@@ -67,7 +71,7 @@ public class WeepingAngel : MonoBehaviour
     
     private bool IsInPlayerLineOfSight()
     {
-        Vector3 directionToAngel = transform.position - player.transform.position;
+        Vector3 directionToAngel = transform.position - playerCamera.transform.position;
         float distToAngel = directionToAngel.magnitude;
         
         // If angel is too far or if not within the player's angle of view
@@ -76,7 +80,7 @@ public class WeepingAngel : MonoBehaviour
         if (distToAngel > detectionRange || angleToAngel > viewAngle)
             return false;
         
-        Vector3 origin = player.transform.position;
+        Vector3 origin = playerCamera.transform.position;
         Vector3 dir = directionToAngel.normalized;
         RaycastHit hit;
 
