@@ -12,15 +12,29 @@
   <Project Path="Unity.InputSystem.csproj" />
   <Project Path="Unity.Searcher.Editor.csproj" />
   <Project Path="Unity.VisualScripting.Core.csproj" />
+<<<<<<< Updated upstream
   <Project Path="Unity.AI.Navigation.Editor.ConversionSystem.csproj" />
   <Project Path="Unity.VisualScripting.State.Editor.csproj" />
   <Project Path="Unity.Burst.CodeGen.csproj" />
+=======
+  <Project Path="Boxophobic.Utils.Scripts.csproj" />
+  <Project Path="Boxophobic.Utils.Editor.csproj" />
+  <Project Path="Unity.VisualScripting.State.Editor.csproj" />
+  <Project Path="Unity.AI.Navigation.Editor.ConversionSystem.csproj" />
+  <Project Path="Unity.Burst.CodeGen.csproj" />
+  <Project Path="Unity.Postprocessing.Editor.csproj" />
+>>>>>>> Stashed changes
   <Project Path="Unity.VisualScripting.Flow.csproj" />
   <Project Path="Unity.PerformanceTesting.csproj" />
   <Project Path="Unity.Burst.Editor.csproj" />
   <Project Path="Unity.Rider.Editor.csproj" />
   <Project Path="Unity.VisualScripting.State.csproj" />
   <Project Path="Unity.AI.Navigation.Updater.csproj" />
+<<<<<<< Updated upstream
+=======
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Unity.Postprocessing.Runtime.csproj" />
+>>>>>>> Stashed changes
   <Project Path="Unity.AI.Navigation.Editor.csproj" />
   <Project Path="Unity.InputSystem.ForUI.csproj" />
   <Project Path="Unity.AI.Navigation.csproj" />
@@ -31,7 +45,11 @@
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
   <Project Path="Unity.CollabProxy.Editor.csproj" />
   <Project Path="Unity.VisualScripting.Shared.Editor.csproj" />
+<<<<<<< Updated upstream
   <Project Path="Assembly-CSharp.csproj" />
+=======
+  <Project Path="Boxophobic.SkyboxCubemapExtended.Editor.csproj" />
+>>>>>>> Stashed changes
   <Project Path="Unity.InputSystem.DocCodeSamples.csproj" />
   <Project Path="Unity.PlasticSCM.Editor.Entities.csproj" />
   <Project Path="Unity.Collections.Editor.csproj" />
