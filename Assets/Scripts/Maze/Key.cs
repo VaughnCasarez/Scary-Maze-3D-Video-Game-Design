@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(Animator))]
 public class Key : MonoBehaviour
@@ -7,9 +8,16 @@ public class Key : MonoBehaviour
 
     public bool IsCollected {get {return isCollected; } set {isCollected = value;}}
     private Animator anim;
+    private VisualEffect beam;
     void Awake()
     {
         anim = GetComponent<Animator>();
+        beam = GetComponentInChildren<VisualEffect>();
+    }
+    void Start()
+    {
+        beam.Reinit();
+        beam.Play();
     }
     void OnTriggerEnter(Collider c)
     {
