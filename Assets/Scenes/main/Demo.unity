@@ -514,7 +514,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df08ee2d68d881247bf216d022c35ff4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxTime: 5
+  maxTime: 60
   endSceneName: End_Scene
   timerText: {fileID: 1530990367}
 --- !u!1001 &1474923780

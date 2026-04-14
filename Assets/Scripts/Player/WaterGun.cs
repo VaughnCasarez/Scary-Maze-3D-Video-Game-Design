@@ -3,6 +3,7 @@ using UnityEngine;
 public class WaterGun : MonoBehaviour
 {
     [SerializeField] private GameObject bullet;
+    [SerializeField] private ParticleSystem flash;
 
     private Transform shootPoint;
     void Start()
@@ -14,5 +15,6 @@ public class WaterGun : MonoBehaviour
     {
         GameObject b = Instantiate(bullet, shootPoint);
         b.GetComponent<Rigidbody>().linearVelocity = speed * direction.normalized;
+        flash.Play();
     }
 }
