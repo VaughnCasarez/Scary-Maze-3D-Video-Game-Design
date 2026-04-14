@@ -440,8 +440,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
+      propertyPath: corn_prefab
+      value: 
+      objectReference: {fileID: 3072634001207192425, guid: 330f35be2cc30384790e4e9cde29274b, type: 3}
+    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
+      propertyPath: grass_prefab
+      value: 
+      objectReference: {fileID: 6496799340054847938, guid: 9583d2e3d2a4e4b499d2d7c5c4460a87, type: 3}
     - target: {fileID: 6927242962984844330, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

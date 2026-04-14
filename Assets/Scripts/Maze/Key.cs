@@ -5,19 +5,23 @@ using UnityEngine.VFX;
 public class Key : MonoBehaviour
 {
     [SerializeField] private bool isCollected;
-
+    [SerializeField] private GameObject keyBeam;
     public bool IsCollected {get {return isCollected; } set {isCollected = value;}}
     private Animator anim;
     private VisualEffect beam;
+    private ParticleSystem particles;
+    
     void Awake()
     {
         anim = GetComponent<Animator>();
         beam = GetComponentInChildren<VisualEffect>();
+        particles = GetComponentInChildren<ParticleSystem>();
     }
     void Start()
     {
         beam.Reinit();
         beam.Play();
+        particles.Play();
     }
     void OnTriggerEnter(Collider c)
     {
@@ -46,6 +50,7 @@ public class Key : MonoBehaviour
 
     private void Deactivate()
     {
+        keyBeam.SetActive(false);
         this.transform.Find("key holder").gameObject.SetActive(false);
         this.gameObject.GetComponent<BoxCollider>().enabled = false;
     }

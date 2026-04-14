@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 [RequireComponent(typeof(AudioSource))]
 public class PlayerControl : MonoBehaviour
@@ -18,8 +19,6 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private AudioClip backgroundTrack;
     [SerializeField][Range(0f, 1f)] private float backgroundVolume = 0.35f;
 
-    [Header("Scene")]
-    [SerializeField] private string endSceneName = "End_Scene";
 
     public float doubleTime = 0f;
     private bool isSprinting = false;
@@ -34,6 +33,7 @@ public class PlayerControl : MonoBehaviour
     private bool isWalkSoundPlaying;
     private bool hasEndedLevel;
     private Animator anim;
+    public Action PlayerDeath;
 
     void Start()
     {
@@ -176,26 +176,26 @@ public class PlayerControl : MonoBehaviour
         backgroundAudioSource.Play();
     }
 
-    void LoadEndScene(GameResult result)
-    {
-        if (hasEndedLevel)
-        {
-            return;
-        }
+    // void LoadEndScene(GameResult result)
+    // {
+    //     if (hasEndedLevel)
+    //     {
+    //         return;
+    //     }
 
-        hasEndedLevel = true;
-        GameResultState.LastResult = result;
-        Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(endSceneName);
-    }
+    //     hasEndedLevel = true;
+    //     GameResultState.LastResult = result;
+    //     Time.timeScale = 1f;
+    //     UnityEngine.SceneManagement.SceneManager.LoadScene(endSceneName);
+    // }
 
 
     void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("You Lost!");
-            LoadEndScene(GameResult.Lose);
+            PlayerDeath?.Invoke();
+            // LoadEndScene(GameResult.Lose);
         }
     }
 }
