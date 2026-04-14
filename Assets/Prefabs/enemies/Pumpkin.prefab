@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3118426010705033552}
   - component: {fileID: 3775965011783756467}
   - component: {fileID: 470827983974890998}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -130,7 +130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4413144146514696824}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pumpkin mode;
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: -8562659531156081922}
   - component: {fileID: 5763397840224559296}
   - component: {fileID: 6547690290970970746}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pumpkin
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -333,7 +333,7 @@ GameObject:
   - component: {fileID: 315224503753912744}
   - component: {fileID: 4832658805382343845}
   - component: {fileID: 299025600295868636}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

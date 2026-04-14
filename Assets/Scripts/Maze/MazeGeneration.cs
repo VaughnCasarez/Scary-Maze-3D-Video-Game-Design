@@ -40,11 +40,14 @@ public class MazeGeneration : MonoBehaviour
     private bool keyNotPlaced = true;
     private int numPumpkins = 0;
     private int numScarecrows = 0;
+    public Action MazeGenerated;
+    public GameObject winBox;
     #endregion
 
     void Start()
     {
         BeginFloorPlanning();
+        MazeGenerated?.Invoke();
     }
     // called by MeshGenerator to get the floor plan
     public void BeginFloorPlanning() {
@@ -330,7 +333,9 @@ public class MazeGeneration : MonoBehaviour
                     
                     curGround.transform.localScale = new Vector3 (tileSize, 1f, tileSize);
                     Vector3 pos = new Vector3(row, 0.5f, col - tileSize * 0.5f); //tile center
-                    Instantiate(gate_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                    GameObject gate = Instantiate(gate_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                    winBox = gate.transform.Find("win box").gameObject;
+                    Debug.Log(winBox == null);
                     continue;
                 }
                 

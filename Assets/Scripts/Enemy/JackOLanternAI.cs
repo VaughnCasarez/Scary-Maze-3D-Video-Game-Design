@@ -64,6 +64,7 @@ public class JackOLanternAI : MonoBehaviour
 
     public void Stun()
     {
+        GetComponent<Rigidbody>().linearVelocity = new Vector3(0f, 0f, 0f);
         isStunned = true;
         curStunTime = 0f;
         light.SetActive(false);

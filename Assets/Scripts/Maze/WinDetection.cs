@@ -1,27 +1,21 @@
 using UnityEngine;
+using System;
 
 public class WinDetection : MonoBehaviour
 {
     [SerializeField] private string endSceneName = "End_Scene";
-    private bool hasTriggered;
-
+    public Action GameWon;
     void OnTriggerEnter(Collider other)
     {
-        if (hasTriggered)
-        {
-            return;
-        }
-
+        Debug.Log("collision!");
         if (other.gameObject.CompareTag("Player"))
         {
+            Debug.Log("hit player");
             PlayerControl player = other.gameObject.GetComponent<PlayerControl>();
             if (player != null && player.hasKey)
             {
-                hasTriggered = true;
-                GameResultState.LastResult = GameResult.Win;
-                Time.timeScale = 1f;
-                UnityEngine.SceneManagement.SceneManager.LoadScene(endSceneName);
-                Debug.Log("you win!");
+                Debug.Log("correct win condition");
+                GameWon?.Invoke();
             }
         }
     }

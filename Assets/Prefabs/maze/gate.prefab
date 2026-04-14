@@ -85,8 +85,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0.5}
+  m_Size: {x: 1, y: 5.45049, z: 1}
+  m_Center: {x: 0, y: -0.21508169, z: 0.5}
 --- !u!114 &4366043644255711350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32d3ae1b0b9d22d4a96ed409d2e89589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  endSceneName: End_Scene
 --- !u!1 &6364298413792294386
 GameObject:
   m_ObjectHideFlags: 0
