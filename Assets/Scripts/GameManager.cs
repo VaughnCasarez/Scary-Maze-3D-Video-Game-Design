@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,17 +10,21 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI timerText; 
     private float timeRemaining;
     private bool gameStarted = false;
+    private MazeGeneration maze;
 
     void Start()
     {
-        GameObject.Find("Maze").GetComponent<MazeGeneration>().MazeGenerated += OnMazeGenerated;
+        maze = GameObject.Find("Maze").GetComponent<MazeGeneration>();
+        maze.MazeGenerated += OnMazeGenerated;
+        maze.BeginMaze();
     }
     void OnMazeGenerated()
     {
         gameStarted = true;
         timeRemaining = maxTime;
-        GameObject.Find("Player(Clone)").GetComponent<PlayerControl>().PlayerDeath += OnLoss;
-        GameObject.Find("Maze").GetComponent<MazeGeneration>().winBox.GetComponent<WinDetection>().GameWon += OnWin;
+        maze = GameObject.Find("Maze").GetComponent<MazeGeneration>();
+        maze.player.GetComponent<PlayerControl>().PlayerDeath += OnLoss;
+        maze.winBox.GetComponent<WinDetection>().GameWon += OnWin;
     }
 
     void FixedUpdate()

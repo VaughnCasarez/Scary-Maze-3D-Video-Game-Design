@@ -42,9 +42,10 @@ public class MazeGeneration : MonoBehaviour
     private int numScarecrows = 0;
     public Action MazeGenerated;
     public GameObject winBox;
+    public GameObject player;
     #endregion
 
-    void Start()
+    public void BeginMaze()
     {
         BeginFloorPlanning();
         MazeGenerated?.Invoke();
@@ -323,7 +324,8 @@ public class MazeGeneration : MonoBehaviour
                     curGround.layer = 3;
                     curGround.transform.localScale = new Vector3 (tileSize, 0.25f, tileSize);
                     Vector3 pos = new Vector3(row + tileSize, 1f, col + tileSize); //tile center
-                    Instantiate(player_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                    player = Instantiate(player_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                    Debug.Log(player == null);
                 } else if (row == goalX && col == length - 1)
                 {
                     GameObject curGround = Instantiate(grass_prefab,  new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
@@ -335,7 +337,6 @@ public class MazeGeneration : MonoBehaviour
                     Vector3 pos = new Vector3(row, 0.5f, col - tileSize * 0.5f); //tile center
                     GameObject gate = Instantiate(gate_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                     winBox = gate.transform.Find("win box").gameObject;
-                    Debug.Log(winBox == null);
                     continue;
                 }
                 
