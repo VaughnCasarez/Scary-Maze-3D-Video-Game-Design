@@ -530,6 +530,14 @@ PrefabInstance:
       value: Maze
       objectReference: {fileID: 0}
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
+      propertyPath: width
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
+      propertyPath: length
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: tileSize
       value: 1
       objectReference: {fileID: 0}
@@ -576,6 +584,10 @@ PrefabInstance:
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: scarecrow_chance
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
+      propertyPath: minSpacingDistance
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6927242962984844330, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: m_LocalScale.x

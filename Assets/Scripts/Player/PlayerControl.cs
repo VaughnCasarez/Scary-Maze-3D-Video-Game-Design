@@ -194,6 +194,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
+            Debug.Log(PlayerDeath == null);
             PlayerDeath?.Invoke();
             // LoadEndScene(GameResult.Lose);
         }
