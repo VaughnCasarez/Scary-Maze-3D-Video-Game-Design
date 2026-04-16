@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     {
         maze = GameObject.Find("Maze").GetComponent<MazeGeneration>();
         maze.MazeGenerated += OnMazeGenerated;
-        maze.BeginMaze();
+        maze.BeginMaze(UnityEngine.Random.Range(0, int.MaxValue));
     }
     void OnMazeGenerated()
     {

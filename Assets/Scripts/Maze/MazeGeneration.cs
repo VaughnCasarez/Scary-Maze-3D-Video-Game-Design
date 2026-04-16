@@ -45,8 +45,9 @@ public class MazeGeneration : MonoBehaviour
     public GameObject player;
     #endregion
 
-    public void BeginMaze()
+    public void BeginMaze(int seed)
     {
+        random_seed = seed;
         BeginFloorPlanning();
         MazeGenerated?.Invoke();
     }
