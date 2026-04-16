@@ -23,6 +23,7 @@ public class MazeGeneration : MonoBehaviour
     [SerializeField] private float scarecrow_chance = 0.05f;
     [SerializeField] private int maxPumpkins = 3;
     [SerializeField] private int maxScarecrows = 3;
+    [SerializeField] private float minSpacingDistance = 5f;
 
     [Header("Object References")]
     [SerializeField] private GameObject floor;
@@ -33,16 +34,18 @@ public class MazeGeneration : MonoBehaviour
     [SerializeField] private GameObject player_prefab;
     [SerializeField] private GameObject pumpkin_prefab;
     [SerializeField] private GameObject scarecrow_prefab;
+    public GameObject winBox;
+    public GameObject player;
     #region book-keeping
     private int[,] floor_map;
-    [SerializeField] public Dictionary<int, List<int[]>> room_assignments;
-    [SerializeField] public int num_rooms;
+    private Dictionary<int, List<int[]>> room_assignments;
+    private List<int[]> placed_object_positions;
+    private int num_rooms;
     private bool keyNotPlaced = true;
     private int numPumpkins = 0;
     private int numScarecrows = 0;
     public Action MazeGenerated;
-    public GameObject winBox;
-    public GameObject player;
+  
     #endregion
 
     public void BeginMaze(int seed)
@@ -313,10 +316,15 @@ public class MazeGeneration : MonoBehaviour
     //for demo, "maze" is just colored planes on the floor
     public void DrawMaze()
     {
+        placed_object_positions = new();
        for (int row = 0; row < width; row++)
        {
             for (int col = 0; col < length; col++)
             {   
+                int[] coords = new int[2];
+                coords[0] = row;
+                coords[1] = col;
+                //add the floor maze tiles and player
                 if (row == goalX && col == 0)
                 {
                     GameObject curGround = Instantiate(grass_prefab,  new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
@@ -326,6 +334,7 @@ public class MazeGeneration : MonoBehaviour
                     curGround.transform.localScale = new Vector3 (tileSize, 0.25f, tileSize);
                     Vector3 pos = new Vector3(row + tileSize, 1f, col + tileSize); //tile center
                     player = Instantiate(player_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                    placed_object_positions.Add(coords);
                     Debug.Log(player == null);
                 } else if (row == goalX && col == length - 1)
                 {
@@ -338,6 +347,7 @@ public class MazeGeneration : MonoBehaviour
                     Vector3 pos = new Vector3(row, 0.5f, col - tileSize * 0.5f); //tile center
                     GameObject gate = Instantiate(gate_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                     winBox = gate.transform.Find("win box").gameObject;
+                    placed_object_positions.Add(coords);
                     continue;
                 }
                 
@@ -348,52 +358,45 @@ public class MazeGeneration : MonoBehaviour
                     curCorn.layer = 3;
                 } else
                 {
+                    //add the ground
                     GameObject curGround = Instantiate(grass_prefab,  new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
                     curGround.name = "[" + row + ", " + col + "]";
                     curGround.transform.SetParent(this.gameObject.transform); 
                     curGround.layer = 3;
-                    if (keyNotPlaced && IsOpenSpace(row, col) && UnityEngine.Random.Range(0, 1f) < key_chance) {
+
+                    //add interactable objects
+                    if (!CanPlaceHere(row, col))
+                    {
+                        continue;
+                    }
+                    if (keyNotPlaced && UnityEngine.Random.Range(0, 1f) < key_chance) {
                         Vector3 pos = new Vector3(row + tileSize, 1f, col + tileSize); //tile center
                         Instantiate(key_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                        placed_object_positions.Add(coords);
                         keyNotPlaced = false;
-                    } else if (IsOpenSpace(row, col))
+                    } else if (numPumpkins < maxPumpkins && UnityEngine.Random.Range(0, 1f) < pumpkin_chance)
                     {
-                        key_chance *= 3f;
-                        // Pumpkin generation
-                        if (numPumpkins < maxPumpkins && UnityEngine.Random.Range(0, 1f) < pumpkin_chance)
-                        {
-                            Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
-                            Instantiate(pumpkin_prefab, pos, Quaternion.LookRotation(Vector3.forward));
-                            numPumpkins++;
-                            pumpkin_chance /= 2f;
-                        } 
-                        // else Scarecrow generation
-                        else if (numScarecrows < maxScarecrows && UnityEngine.Random.Range(0, 1f) < scarecrow_chance)
-                        {
-                            Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
-                            Instantiate(scarecrow_prefab, pos, Quaternion.LookRotation(Vector3.forward));
-                            numScarecrows++;
-                            scarecrow_chance /= 2f;
-                        }
-                        // // Increase chances if neither was placed
-                        // else 
-                        // {
-                        //     if (numPumpkins < maxPumpkins)
-                        //     {
-                        //         pumpkin_chance *= 2f;
-                        //     }
-                        //     if (numScarecrows < maxScarecrows)
-                        //     {
-                        //         scarecrow_chance *= 2f;
-                        //     }
-                        // }
+                        Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
+                        Instantiate(pumpkin_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                        placed_object_positions.Add(coords);
+                        numPumpkins++;
+                    } 
+                    else if (numScarecrows < maxScarecrows && UnityEngine.Random.Range(0, 1f) < scarecrow_chance)
+                    {
+                        Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
+                        Instantiate(scarecrow_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                        placed_object_positions.Add(coords);
+                        numScarecrows++;
                     }
                 }
             }
-        } 
-        
-    }
+        }
+    } 
 
+    private bool CanPlaceHere(int r, int c)
+    {
+        return IsOpenSpace(r, c) && IsFarAway(r, c);
+    }
     //are there walls within a 5x5 centered at x, y?
     private bool IsOpenSpace(int x, int y) {
         int num = 0;
@@ -420,5 +423,18 @@ public class MazeGeneration : MonoBehaviour
             }
         }
         return num <= 1;
+    }
+
+    private bool IsFarAway(int r, int c)
+    {
+        foreach (var existing in placed_object_positions)
+        {
+            float arg = Mathf.Pow(r - existing[0], 2) + Mathf.Pow(c - existing[1], 2);
+            if (Mathf.Sqrt(arg) < minSpacingDistance)
+            {
+                return false;
+            } 
+        }
+        return true;
     }
 }
