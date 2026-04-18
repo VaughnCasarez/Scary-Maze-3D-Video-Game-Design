@@ -6,7 +6,7 @@ using System;
 public class PlayerControl : MonoBehaviour
 {
     [SerializeField] public float moveSpeed = 5f;
-    public float turnSpeed = 150f;
+    [Range(1f, 30f)] public float turnSpeed = 8f;
     public float shootSpeed = 10f;
 
     [Header("Audio")]
@@ -19,8 +19,9 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private AudioClip backgroundTrack;
     [SerializeField][Range(0f, 1f)] private float backgroundVolume = 0.35f;
 
+    public bool IsCrouching => isCrouching;
 
-    public float doubleTime = 0f;
+    private float doubleTime = 0f;
     private bool isSprinting = false;
     private bool isCrouching = false;
 
@@ -42,6 +43,9 @@ public class PlayerControl : MonoBehaviour
         gun = transform.Find("gun").GetComponent<WaterGun>();
         key = GameObject.FindWithTag("Key").GetComponent<Key>();
 
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         playerAudioSource = GetComponent<AudioSource>();
         if (playerAudioSource == null)
         {
@@ -55,78 +59,58 @@ public class PlayerControl : MonoBehaviour
     }
 
     void Update()
+{
+    if (Keyboard.current.shiftKey.wasPressedThisFrame)
     {
-        //for cam and player
-        float move = 0f;
-        float turn = 0f;
-        //sprint double tap
-        if (Keyboard.current.shiftKey.wasPressedThisFrame)
-        {
-            if (Time.time - doubleTime < .3f)
-            {
-                isSprinting = true;
-            }
-            doubleTime = Time.time;
-        }
-        // crouching -L
+        if (Time.time - doubleTime < .3f)
+            isSprinting = true;
+        doubleTime = Time.time;
+    }
+    if (Keyboard.current.shiftKey.wasReleasedThisFrame)
+        isSprinting = false;
 
-        if (Keyboard.current.ctrlKey.wasPressedThisFrame)
-        {
-            isCrouching = !isCrouching;
-            if (isCrouching)
-            {
-                transform.localScale = new Vector3(1f, 0.5f, 1f);
-            }
-            else
-            {
-                transform.localScale = new Vector3(1f, 1f, 1f);
-            }
-        }
-        if (Keyboard.current.shiftKey.wasReleasedThisFrame)
-        {
-            isSprinting = false;
-        }
-        if (Keyboard.current.wKey.isPressed)
-            move = 1f;
-        if (Keyboard.current.sKey.isPressed)
-            move = -1f;
-        if (Keyboard.current.aKey.isPressed)
-            turn = -1f;
-        if (Keyboard.current.dKey.isPressed)
-            turn = 1f;
-        if (Input.GetKeyUp(KeyCode.F))
-        {
-            gun.Shoot(shootSpeed, transform.forward);
-            PlayShootSound();
-        }
-        if (inKeyRange && Input.GetKeyUp(KeyCode.E))
-        {
-            key.CollectKey();
-            hasKey = true;
-        }
-
-        float currentSpeed = moveSpeed;
-        if (isSprinting)
-        {
-            currentSpeed = 10f;
-        }
+    if (Keyboard.current.ctrlKey.wasPressedThisFrame)
+    {
+        isCrouching = !isCrouching;
         if (isCrouching)
         {
-            currentSpeed = 2f;
+            transform.localScale = new Vector3(1f, 0.5f, 1f);
         }
-
-        HandleWalkAudio(move);
-        if (move != 0f)
+        else
         {
-            anim.SetBool("isWalking", true);
-        } else
-        {
-            anim.SetBool("isWalking", false);
+            transform.localScale = new Vector3(1f, 1f, 1f);
         }
-        transform.Translate(Vector3.forward * move * currentSpeed * Time.deltaTime);
-        transform.Rotate(Vector3.up * turn * turnSpeed * Time.deltaTime);
-
     }
+
+    float moveX = 0f, moveZ = 0f;
+    if (Keyboard.current.wKey.isPressed) moveZ = 1;
+    if (Keyboard.current.sKey.isPressed) moveZ = -1;
+    if (Keyboard.current.aKey.isPressed) moveX = -1;
+    if (Keyboard.current.dKey.isPressed) moveX = 1;
+
+    float move = new Vector2(moveX, moveZ).magnitude;
+    Vector3 moveDir = (transform.forward * moveZ + transform.right * moveX).normalized;
+
+    float mouseX = Mouse.current.delta.ReadValue().x * 0.1f;
+    transform.Rotate(Vector3.up * mouseX * turnSpeed * Time.deltaTime);
+
+    if (Mouse.current.leftButton.wasPressedThisFrame)
+    {
+        gun.Shoot(shootSpeed, transform.forward);
+        PlayShootSound();
+    }
+    if (inKeyRange && Keyboard.current.eKey.wasReleasedThisFrame)
+    {
+        key.CollectKey();
+        hasKey = true;
+    }
+
+    float currentSpeed = isSprinting ? 10f : isCrouching ? 1f : moveSpeed;
+
+    HandleWalkAudio(move);
+    anim.SetBool("isWalking", move != 0f);
+    transform.Translate(moveDir * currentSpeed * Time.deltaTime, Space.World);
+}
 
     void HandleWalkAudio(float move)
     {
@@ -194,9 +178,17 @@ public class PlayerControl : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
+            UnlockCursor();
             Debug.Log(PlayerDeath == null);
             PlayerDeath?.Invoke();
             // LoadEndScene(GameResult.Lose);
         }
     }
+
+    public static void UnlockCursor()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
 }
+

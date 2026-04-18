@@ -11,6 +11,7 @@ public class WeepingAngel : MonoBehaviour
     private Animator anim;
     private GameObject player;
     private Camera playerCamera;
+    private PlayerControl playerControl;
 
     private bool isActive;
 
@@ -31,6 +32,7 @@ public class WeepingAngel : MonoBehaviour
             return;
         }
         
+        playerControl = player.GetComponent<PlayerControl>();
         playerCamera = player.GetComponentInChildren<Camera>();
         currentState = AngelState.Stop;
     }
@@ -63,22 +65,26 @@ public class WeepingAngel : MonoBehaviour
     }
 
     private void SeekPlayer()
+{
+    if (playerControl.IsCrouching)
     {
-        Vector3 directionToPlayer = (player.transform.position - transform.position).normalized;
-        //transform.position += directionToPlayer * moveSpeed * Time.deltaTime;
-        agent.SetDestination(player.transform.position);
+        agent.ResetPath();
+        return;
     }
-    
+    agent.SetDestination(player.transform.position);
+}
     private bool IsInPlayerLineOfSight()
     {
+        
+
         Vector3 directionToAngel = transform.position - playerCamera.transform.position;
         float distToAngel = directionToAngel.magnitude;
         
         // If angel is too far or if not within the player's angle of view
         // Camera angle is a bit weird, maybe instead of playerCamera, should be player's center?
         float angleToAngel = Vector3.Angle(player.transform.forward, directionToAngel);
-        if (distToAngel > detectionRange || angleToAngel > viewAngle)
-            return false;
+        if (distToAngel > detectionRange || angleToAngel > viewAngle || playerControl.IsCrouching)
+        return false;
         
         Vector3 origin = playerCamera.transform.position;
         Vector3 dir = directionToAngel.normalized;
