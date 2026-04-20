@@ -5,6 +5,7 @@ public class SceneManager : MonoBehaviour
     public string game_scene_name;
     public string main_menu_scene_name;
     public GameObject instruction_panel;
+    public GameObject main_menu;
     public string win_lose_scene_name;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -12,6 +13,10 @@ public class SceneManager : MonoBehaviour
         if (instruction_panel != null)
         {
             instruction_panel.SetActive(false);
+        }
+        if (main_menu != null)
+        {
+            main_menu.SetActive(true);
         }
 
     }
@@ -40,6 +45,10 @@ public class SceneManager : MonoBehaviour
         {
             instruction_panel.SetActive(true);
         }
+        if (main_menu != null)
+        {
+            main_menu.SetActive(false);
+        }
     }
 
     public void HideInstructionPanel()
@@ -47,6 +56,10 @@ public class SceneManager : MonoBehaviour
         if (instruction_panel != null)
         {
             instruction_panel.SetActive(false);
+        }
+        if (main_menu != null)
+        {
+            main_menu.SetActive(true);
         }
     }
 
