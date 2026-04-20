@@ -14,6 +14,7 @@ public class JackOLanternAI : MonoBehaviour
     private float curStunTime = 0f;
 
     private Vector3 startPos;
+    private PlayerControl playerControl;
 
     void Awake()
     {
@@ -29,7 +30,7 @@ public class JackOLanternAI : MonoBehaviour
         if (!isActive) {
             return;
         }
-        if (!isStunned && player != null)
+        if (!isStunned && player != null && (playerControl == null || !playerControl.IsCrouching))
         {
             anim.SetBool("isChasing", true);
 
@@ -57,9 +58,11 @@ public class JackOLanternAI : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             player = other.transform;
+            playerControl = other.GetComponent<PlayerControl>();
             isActive = true;
             aggroCollider.enabled = false;
         }
+
     }
 
     public void Stun()
