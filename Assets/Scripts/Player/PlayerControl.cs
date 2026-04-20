@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using TMPro;
 
 [RequireComponent(typeof(AudioSource))]
 public class PlayerControl : MonoBehaviour
@@ -8,6 +9,9 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] public float moveSpeed = 5f;
     [Range(1f, 30f)] public float turnSpeed = 8f;
     public float shootSpeed = 10f;
+    [SerializeField] private int playerHealth = 5;
+    private TextMeshProUGUI healthbarText; 
+    private float nextDamageTime = 0f;
 
     [Header("Audio")]
     [SerializeField] private AudioClip walkSound;
@@ -42,6 +46,8 @@ public class PlayerControl : MonoBehaviour
         anim.SetBool("isWalking", false);
         gun = transform.Find("gun").GetComponent<WaterGun>();
         key = GameObject.FindWithTag("Key").GetComponent<Key>();
+        healthbarText = GameObject.FindWithTag("Healthbar").GetComponent<TextMeshProUGUI>();
+        healthbarText.text = $"Health: {playerHealth}";
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -176,12 +182,19 @@ public class PlayerControl : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("Enemy") && Time.time > nextDamageTime)
         {
-            UnlockCursor();
-            Debug.Log(PlayerDeath == null);
-            PlayerDeath?.Invoke();
-            // LoadEndScene(GameResult.Lose);
+            playerHealth--;
+            healthbarText.text = $"Health: {playerHealth}";
+            Debug.Log($"Player hit! Remaining health: {playerHealth}");
+            if (playerHealth <= 0)
+            {
+                UnlockCursor();
+                Debug.Log(PlayerDeath == null);
+                PlayerDeath?.Invoke();
+                // LoadEndScene(GameResult.Lose);
+            }
+            nextDamageTime = Time.time + 1f; // 1 sec dmg cooldown
         }
     }
 
