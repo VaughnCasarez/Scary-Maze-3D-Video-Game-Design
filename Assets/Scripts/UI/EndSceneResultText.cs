@@ -4,6 +4,9 @@ public class EndSceneResultText : MonoBehaviour
 {
     [SerializeField] private GameObject winTextObject;
     [SerializeField] private GameObject loseTextObject;
+    [SerializeField] private GameObject hero;
+    [SerializeField] private Material winSkybox;
+    [SerializeField] private Material loseSkybox;
 
     void Start()
     {
@@ -20,6 +23,19 @@ public class EndSceneResultText : MonoBehaviour
         if (loseTextObject != null)
         {
             loseTextObject.SetActive(isLose);
+        }
+
+        if (hero != null)
+        {
+            hero.SetActive(isWin);
+        }
+
+        if (isWin)
+        {
+            RenderSettings.skybox = winSkybox;
+        } else
+        {
+            RenderSettings.skybox = loseSkybox;
         }
     }
 }
