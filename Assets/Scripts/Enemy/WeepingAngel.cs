@@ -6,32 +6,37 @@ public class WeepingAngel : MonoBehaviour
     [SerializeField] private float detectionRange = 20f;
     [SerializeField] private float viewAngle = 60f;
     [SerializeField] private float moveSpeed = 3f;
-    
+    [SerializeField] private AudioClip[] footstepSfx;
+    [SerializeField] private float footstepInterval = 0.45f;
+
     private NavMeshAgent agent;
     private Animator anim;
+    private AudioSource audioSource;
     private GameObject player;
     private Camera playerCamera;
     private PlayerControl playerControl;
+    private float footstepTimer;
 
     private bool isActive;
 
     // State machine
     public enum AngelState { SeekPlayer, Stop }
     public AngelState currentState;
-    
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        agent.speed = moveSpeed; 
+        agent.speed = moveSpeed;
         anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         player = GameObject.FindGameObjectWithTag("Player");
-        
+
         if (player == null)
         {
             Debug.LogError("Player is null");
             return;
         }
-        
+
         playerControl = player.GetComponent<PlayerControl>();
         playerCamera = player.GetComponentInChildren<Camera>();
         currentState = AngelState.Stop;
@@ -39,7 +44,7 @@ public class WeepingAngel : MonoBehaviour
 
     void Update()
     {
-        if (player == null || playerCamera == null|| !isActive)
+        if (player == null || playerCamera == null || !isActive)
             return;
 
         if (IsInPlayerLineOfSight())
@@ -53,7 +58,7 @@ public class WeepingAngel : MonoBehaviour
             currentState = AngelState.SeekPlayer;
         }
 
-        switch(currentState)
+        switch (currentState)
         {
             case AngelState.SeekPlayer:
                 SeekPlayer();
@@ -62,30 +67,32 @@ public class WeepingAngel : MonoBehaviour
                 agent.velocity = Vector3.zero;
                 break;
         }
+
+        HandleFootstepAudio();
     }
 
     private void SeekPlayer()
-{
-    if (playerControl.IsCrouching)
     {
-        agent.ResetPath();
-        return;
+        if (playerControl.IsCrouching)
+        {
+            agent.ResetPath();
+            return;
+        }
+        agent.SetDestination(player.transform.position);
     }
-    agent.SetDestination(player.transform.position);
-}
     private bool IsInPlayerLineOfSight()
     {
-        
+
 
         Vector3 directionToAngel = transform.position - playerCamera.transform.position;
         float distToAngel = directionToAngel.magnitude;
-        
+
         // If angel is too far or if not within the player's angle of view
         // Camera angle is a bit weird, maybe instead of playerCamera, should be player's center?
         float angleToAngel = Vector3.Angle(player.transform.forward, directionToAngel);
         if (distToAngel > detectionRange || angleToAngel > viewAngle || playerControl.IsCrouching)
-        return false;
-        
+            return false;
+
         Vector3 origin = playerCamera.transform.position;
         Vector3 dir = directionToAngel.normalized;
         RaycastHit hit;
@@ -106,5 +113,30 @@ public class WeepingAngel : MonoBehaviour
         {
             isActive = true;
         }
+    }
+
+    private void HandleFootstepAudio()
+    {
+        if (audioSource == null || footstepSfx == null || footstepSfx.Length == 0)
+        {
+            return;
+        }
+
+        bool isMoving = currentState == AngelState.SeekPlayer && agent != null && agent.velocity.sqrMagnitude > 0.05f;
+        if (!isMoving)
+        {
+            footstepTimer = 0f;
+            return;
+        }
+
+        footstepTimer -= Time.deltaTime;
+        if (footstepTimer > 0f)
+        {
+            return;
+        }
+
+        int randomIndex = Random.Range(0, footstepSfx.Length);
+        audioSource.PlayOneShot(footstepSfx[randomIndex]);
+        footstepTimer = footstepInterval;
     }
 }

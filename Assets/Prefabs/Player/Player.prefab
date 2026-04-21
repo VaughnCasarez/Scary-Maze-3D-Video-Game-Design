@@ -318,15 +318,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  turnSpeed: 150
+  turnSpeed: 30
   shootSpeed: 10
+  playerHealth: 5
   walkSound: {fileID: 8300000, guid: 254227af2591e76489e0b348f613aa16, type: 3}
   shootSound: {fileID: 8300000, guid: f7e6f866b13ec01458f7bf91c41cd8b3, type: 3}
+  hurtSound: {fileID: 8300000, guid: 62e4d26ec4a77a4469c5a97f5e6bed7c, type: 3}
   walkVolume: 0.6
   shootVolume: 0.9
+  hurtVolume: 1
   backgroundTrack: {fileID: 8300000, guid: fd6a9abcc316d72418935f180e1c31c6, type: 3}
   backgroundVolume: 0.166
-  doubleTime: 0
   inKeyRange: 0
   hasKey: 0
 --- !u!54 &998536817777483120
