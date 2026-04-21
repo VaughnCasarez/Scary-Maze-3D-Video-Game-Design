@@ -15,8 +15,10 @@ public class PlayerControl : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioClip walkSound;
     [SerializeField] private AudioClip shootSound;
+    [SerializeField] private AudioClip hurtSound;
     [SerializeField][Range(0f, 1f)] private float walkVolume = 0.6f;
     [SerializeField][Range(0f, 1f)] private float shootVolume = 0.9f;
+    [SerializeField][Range(0f, 1f)] private float hurtVolume = 1f;
 
     [Header("Level Audio")]
     [SerializeField] private AudioClip backgroundTrack;
@@ -170,6 +172,7 @@ public class PlayerControl : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy") && Time.time > nextDamageTime)
         {
             playerHealth--;
+            PlayHurtSound();
             PlayerDamage?.Invoke(playerHealth);
             Debug.Log($"Player hit! Remaining health: {playerHealth}");
             if (playerHealth <= 0)
@@ -179,6 +182,16 @@ public class PlayerControl : MonoBehaviour
             }
             nextDamageTime = Time.time + 1f; // 1 sec dmg cooldown
         }
+    }
+
+    void PlayHurtSound()
+    {
+        if (hurtSound == null)
+        {
+            return;
+        }
+
+        playerAudioSource.PlayOneShot(hurtSound, hurtVolume);
     }
 
     // public static void UnlockCursor()
