@@ -48,6 +48,9 @@ public class JackOLanternAI : MonoBehaviour
             {
                 isStunned = false;
                 light.SetActive(true);
+                // GetComponent<Rigidbody>().constraints &= ~RigidbodyConstraints.FreezePositionY;
+                // GetComponent<Rigidbody>().isKinematic = false;
+                agent.isStopped = false;
             }
 
         }
@@ -67,11 +70,16 @@ public class JackOLanternAI : MonoBehaviour
 
     public void Stun()
     {
-        GetComponent<Rigidbody>().linearVelocity = new Vector3(0f, 0f, 0f);
+        // GetComponent<Rigidbody>().linearVelocity = new Vector3(0f, 0f, 0f);
         isStunned = true;
         curStunTime = 0f;
         light.SetActive(false);
         anim.SetBool("isChasing", false);
+        // GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        // GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        // GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        // GetComponent<Rigidbody>().isKinematic = true;
+        agent.isStopped = true;
     }
 
     // void OnTriggerExit(Collider other)
