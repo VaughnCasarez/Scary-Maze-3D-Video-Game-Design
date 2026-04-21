@@ -317,8 +317,8 @@ public class MazeGeneration : MonoBehaviour
     public void DrawMaze()
     {
         placed_object_positions = new();
-       for (int row = 0; row < width; row++)
-       {
+        for (int row = 0; row < width; row++)
+        {
             for (int col = 0; col < length; col++)
             {   
                 int[] coords = new int[2];
@@ -390,6 +390,18 @@ public class MazeGeneration : MonoBehaviour
                     }
                 }
             }
+        }
+        if (keyNotPlaced)
+        {
+            int row = width / 2;
+            int col = length / 2;
+            int[] coords = new int[2];
+            coords[0] = row;
+            coords[1] = col;
+            Vector3 pos = new Vector3(row + tileSize, 1f, col + tileSize); //tile center
+            Instantiate(key_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+            placed_object_positions.Add(coords);
+            keyNotPlaced = false;
         }
     } 
 
