@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.VFX;
+using System;
 
 [RequireComponent(typeof(Animator))]
 public class Key : MonoBehaviour
@@ -10,6 +11,7 @@ public class Key : MonoBehaviour
     private Animator anim;
     private VisualEffect beam;
     private ParticleSystem particles;
+    public Action KeyCollected;
     
     void Awake()
     {
@@ -45,6 +47,7 @@ public class Key : MonoBehaviour
 
     public void CollectKey()
     {
+        KeyCollected?.Invoke();
         Deactivate();
     }
 

@@ -1516,6 +1516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 22752583}
+  goalText: {fileID: 975485768}
   healthBars:
   - {fileID: 2108391391}
   - {fileID: 1567325822}
@@ -2260,7 +2261,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Find The Gate Key and GET OUT
+  m_text: Find the gate key!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e35a71c727b7b6342b9ce17c21b96682, type: 2}
   m_sharedMaterial: {fileID: -7524211566244382382, guid: e35a71c727b7b6342b9ce17c21b96682, type: 2}
@@ -3244,7 +3245,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 12, y: 0, z: 12}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}

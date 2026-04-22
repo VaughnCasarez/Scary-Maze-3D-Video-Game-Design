@@ -41,6 +41,7 @@ public class MazeGeneration : MonoBehaviour
     [SerializeField] private GameObject scarecrow_prefab;
     public GameObject winBox;
     public GameObject player;
+    public GameObject key;
     #region book-keeping
     private int[,] floor_map;
     private Dictionary<int, List<int[]>> room_assignments;
@@ -410,10 +411,14 @@ public class MazeGeneration : MonoBehaviour
                     }
                     if (keyNotPlaced && UnityEngine.Random.Range(0, 1f) < key_chance) {
                         Vector3 pos = new Vector3(row + tileSize, 1f, col + tileSize); //tile center
-                        Instantiate(key_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                        key = Instantiate(key_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                         placed_object_positions.Add(coords);
                         keyNotPlaced = false;
-                    } else if (numPumpkins < maxPumpkins && UnityEngine.Random.Range(0, 1f) < pumpkin_chance)
+                    } else
+                    {
+                        key_chance *= 2f;
+                    }
+                    if (numPumpkins < maxPumpkins && UnityEngine.Random.Range(0, 1f) < pumpkin_chance)
                     {
                         Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
                         Instantiate(pumpkin_prefab, pos, Quaternion.LookRotation(Vector3.forward));
@@ -444,18 +449,6 @@ public class MazeGeneration : MonoBehaviour
                     } 
                 }
             }
-        }
-        if (keyNotPlaced)
-        {
-            int row = width / 2;
-            int col = length / 2;
-            int[] coords = new int[2];
-            coords[0] = row;
-            coords[1] = col;
-            Vector3 pos = new Vector3(row + tileSize, 1f, col + tileSize); //tile center
-            Instantiate(key_prefab, pos, Quaternion.LookRotation(Vector3.forward));
-            placed_object_positions.Add(coords);
-            keyNotPlaced = false;
         }
     } 
 

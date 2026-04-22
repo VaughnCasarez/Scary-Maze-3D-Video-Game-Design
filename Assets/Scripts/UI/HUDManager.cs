@@ -6,6 +6,7 @@ public class HUDManager : MonoBehaviour
 {
     [Header("Control Variables")]
     [SerializeField] private TextMeshProUGUI timerText; 
+    [SerializeField] private TextMeshProUGUI goalText; 
     [SerializeField] private GameObject[] healthBars; 
     [SerializeField] private GameObject[] bulletIcons; 
     [SerializeField] private GameObject hud; 
@@ -33,6 +34,11 @@ public class HUDManager : MonoBehaviour
     public void IncreaseBullets(int bullets)
     {
         bulletIcons[bullets - 1].SetActive(true);
+    }
+
+    public void UpdateGoal()
+    {
+        goalText.text = "Key Collected! Now Escape!";
     }
 
     public void PauseMenu(bool isOpen)

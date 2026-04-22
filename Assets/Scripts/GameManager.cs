@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
         maze.player.GetComponent<PlayerControl>().BulletGained += OnBulletGain;
         maze.player.GetComponent<PlayerControl>().BulletUsed += OnBulletUsed;
         maze.winBox.GetComponent<WinDetection>().GameWon += OnWin;
+        maze.key.GetComponent<Key>().KeyCollected += OnKeyCollect;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -66,6 +67,10 @@ public class GameManager : MonoBehaviour
         {
             LockCursor();
         }
+    }
+    void OnKeyCollect()
+    {
+        hud.UpdateGoal();
     }
 
     void OnDamage(int health)
