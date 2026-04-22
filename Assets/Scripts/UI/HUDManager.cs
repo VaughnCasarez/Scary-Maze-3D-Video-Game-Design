@@ -23,7 +23,7 @@ public class HUDManager : MonoBehaviour
     }
     public void IncreaseHealth(int health)
     {
-        healthBars[health].SetActive(true);
+        healthBars[health - 1].SetActive(true);
     }
 
     public void DecreaseBullets(int bullets)
@@ -32,7 +32,7 @@ public class HUDManager : MonoBehaviour
     }
     public void IncreaseBullets(int bullets)
     {
-        bulletIcons[bullets].SetActive(true);
+        bulletIcons[bullets - 1].SetActive(true);
     }
 
     public void PauseMenu(bool isOpen)

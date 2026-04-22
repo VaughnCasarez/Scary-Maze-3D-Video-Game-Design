@@ -49,11 +49,12 @@ public class Candy : MonoBehaviour
         {
             manager.GainTime(15f);
         }
+        Deactivate();
     }
 
     private void Deactivate()
     {
-        gameObject.SetActive(false);
-        gameObject.GetComponent<BoxCollider>().enabled = false;
+        this.transform.Find("candyHolder").gameObject.SetActive(false);
+        this.gameObject.GetComponent<BoxCollider>().enabled = false;
     }
 }
