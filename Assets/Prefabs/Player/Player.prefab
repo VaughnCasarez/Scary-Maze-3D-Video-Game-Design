@@ -276,7 +276,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 333415588703554684}
@@ -319,6 +319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   turnSpeed: 30
+  maxBullets: 3
   shootSpeed: 10
   playerHealth: 5
   walkSound: {fileID: 8300000, guid: 254227af2591e76489e0b348f613aa16, type: 3}
@@ -330,7 +331,9 @@ MonoBehaviour:
   backgroundTrack: {fileID: 8300000, guid: fd6a9abcc316d72418935f180e1c31c6, type: 3}
   backgroundVolume: 0.166
   inKeyRange: 0
+  inCandyRange: 0
   hasKey: 0
+  curCandy: {fileID: 0}
 --- !u!54 &998536817777483120
 Rigidbody:
   m_ObjectHideFlags: 0

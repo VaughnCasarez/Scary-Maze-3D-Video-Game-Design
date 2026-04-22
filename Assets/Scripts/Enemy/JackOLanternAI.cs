@@ -67,8 +67,12 @@ public class JackOLanternAI : MonoBehaviour
         {
             player = other.transform;
             playerControl = other.GetComponent<PlayerControl>();
-            isActive = true;
-            aggroCollider.enabled = false;
+            if (!playerControl.IsCrouching)
+            {
+                isActive = true;
+                aggroCollider.enabled = false;
+            }
+            
         }
 
     }

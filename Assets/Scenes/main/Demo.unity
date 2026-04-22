@@ -2867,96 +2867,20 @@ PrefabInstance:
       value: Maze
       objectReference: {fileID: 0}
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: width
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: length
-      value: 30
-      objectReference: {fileID: 0}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: tileSize
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: key_chance
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: corn_prefab
-      value: 
-      objectReference: {fileID: 3072634001207192425, guid: 330f35be2cc30384790e4e9cde29274b, type: 3}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: maxPumpkins
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: random_seed
-      value: 1
+      value: 0.005
       objectReference: {fileID: 0}
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: wall_chance
-      value: 0.45
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: candy_chance
-      value: 0.1
+      value: 0.05
       objectReference: {fileID: 0}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: grass_prefab
-      value: 
-      objectReference: {fileID: 6496799340054847938, guid: 9583d2e3d2a4e4b499d2d7c5c4460a87, type: 3}
     - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: maxScarecrows
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: player_prefab
-      value: 
-      objectReference: {fileID: 5455520029652980035, guid: defa906985d1400488f65c785ae0b4e6, type: 3}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: pumpkin_chance
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: pumpkin_prefab
-      value: 
-      objectReference: {fileID: 4249628757518167691, guid: 986d20c9620832441bfb04fe5f3e2e07, type: 3}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: scarecrow_chance
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: minSpacingDistance
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: timer_candy_prefab
-      value: 
-      objectReference: {fileID: 7804553374603905491, guid: 9b5e51363b9bb864b900b30116c04c86, type: 3}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: extra_life_candy_prefab
-      value: 
-      objectReference: {fileID: 1742485428813559723, guid: 49e29ce6c4e0b0842aba4676e64a4b9f, type: 3}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: corn_with_lantern_prefab
-      value: 
-      objectReference: {fileID: 3072634001207192425, guid: 6fd8bb00229c1e94da4909c9fd15939a, type: 3}
-    - target: {fileID: 6384555432779833044, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: bullet_reload_candy_prefab
-      value: 
-      objectReference: {fileID: 2256624337092560441, guid: da99f992cca36b84180b486783eec742, type: 3}
-    - target: {fileID: 6927242962984844330, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6927242962984844330, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6927242962984844330, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6927242962984844330, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2997,10 +2921,6 @@ PrefabInstance:
     - target: {fileID: 6927242962984844330, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6927242962984844330, guid: 535e5f1e7eedc0d47adad84985dc2c35, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
