@@ -241,23 +241,48 @@ public class MazeGeneration : MonoBehaviour
         }
     }
     
-    //connect walls between empty rooms
-    private void BreakWalls() {
-        //we connect all rooms to the largst room
+    //connect walls between empty rooms until all rooms are accessible
+    private void BreakWalls()
+    {
+        // Keep reconnecting until there's only one room left
+        var dfs = RunDFS();
+        room_assignments = dfs.Groups;
+        num_rooms = dfs.RoomCount;
+
         int largestRoom = GetLargestRoom();
-        for (int i = 0; i <= room_assignments.Count; i++) {
-            if (!room_assignments.ContainsKey(i) || i == largestRoom) {
-                continue;
+        int maxIterations = width * length; 
+        int iter = 0;
+
+        while (num_rooms > 1 && iter++ < maxIterations)
+        {
+            largestRoom = GetLargestRoom();
+
+            // Find any room that isn't the largest
+            int targetRoom = -1;
+            foreach (var room in room_assignments)
+            {
+                if (room.Key <= 0 || room.Key == largestRoom) {
+                    continue;
+                }
+                if (room.Value.Count > 0) {
+                    targetRoom = room.Key; 
+                    break; 
+                }
             }
-            //select a random cell from the largest room b/c idk nearest neighbor algorithms
-            int randomSourceIndex = UnityEngine.Random.Range(0, room_assignments[largestRoom].Count);
-            int[] source = room_assignments[largestRoom][randomSourceIndex];
-            //select a random cell from the room we're connecting to
-            int randomTargetIndex = UnityEngine.Random.Range(0, room_assignments[i].Count);
-            int[] target = room_assignments[i][randomTargetIndex];
-            room_assignments[i].Remove(target); //remove this cell so we don't select it later
-            //"blast open walls"
+            if (targetRoom == -1) {
+                break;
+            }
+
+            // Pick random cells from each and carve between them
+            int[] source = room_assignments[largestRoom][UnityEngine.Random.Range(0, room_assignments[largestRoom].Count)];
+            int[] target = room_assignments[targetRoom][UnityEngine.Random.Range(0, room_assignments[targetRoom].Count)];
+
             CarveHallway(source, target);
+
+            // Re-run DFS so room_assignments reflects the carved path
+            dfs = RunDFS();
+            room_assignments = dfs.Groups;
+            num_rooms = dfs.RoomCount;
         }
     }
     private int GetLargestRoom() {
@@ -276,42 +301,41 @@ public class MazeGeneration : MonoBehaviour
     }
 
     //"blast open walls" by carving an L-shaped path
-    private void CarveHallway(int[] source, int[] target) {
-        int endX = target[0];
-        //if the target is further left, carve to the left
-        if (target[0] - source[0] < 0) {
-            for (int x = source[0]; x >= target[0]; x--) {
-                room_assignments[floor_map[x, source[1]]].Remove(new int[] {x, source[1]});
-                floor_map[x, source[1]] = floor_map[source[0], source[1]];
-                room_assignments[floor_map[source[0], source[1]]].Add(new int[] {x, source[1]});
+    private void CarveHallway(int[] source, int[] target)
+    {
+        //where are we starting
+        int x = source[0];
+        int y = source[1];
+        //where are we ending
+        int tx = target[0];
+        int ty = target[1];
+
+        int stepX = (tx > x) ? 1 : -1;
+        //horizontal cut
+        while (x != tx)
+        {   
+            //mark the current square as floor
+            if (floor_map[x, y] == -1) {
+                floor_map[x, y] = 0; 
             }
-        } 
-        //otherwise, carve to the right
-        else {
-             for (int x = source[0]; x <= target[0]; x++) {
-                room_assignments[floor_map[x, source[1]]].Remove(new int[] {x, source[1]});
-                floor_map[x, source[1]] = floor_map[source[0], source[1]];
-                room_assignments[floor_map[source[0], source[1]]].Add(new int[] {x, source[1]});
-            }
+            x += stepX;
         }
-        //if the target is further down, carve down
-        if (target[1] - source[1] < 0) {
-            for (int y = source[1]; y >= target[1]; y--) {
-                room_assignments[floor_map[endX, y]].Remove(new int[] {endX, y});
-                floor_map[endX, y] = floor_map[source[0], source[1]];
-                room_assignments[floor_map[source[0], source[1]]].Add(new int[] {endX, y});
-            }
-        } 
-        //otherwise, carve upwards
-        else {
-            for (int y = source[1]; y <= target[1]; y++) {
-                room_assignments[floor_map[endX, y]].Remove(new int[] {endX, y});
-                floor_map[endX, y] = floor_map[source[0], source[1]];
-                room_assignments[floor_map[source[0], source[1]]].Add(new int[] {endX, y});
-            }
+
+        //vertical cut
+        int stepY = (ty > y) ? 1 : -1;
+        while (y != ty)
+        {  
+            //mark the current square as floor
+            if (floor_map[x, y] == -1)
+                floor_map[x, y] = 0;
+            y += stepY;
+        }
+
+        //mark the start as floor
+        if (floor_map[x, y] == -1) {
+            floor_map[x, y] = 0;
         }
     }
-
 
     private bool OutOfBounds(int nx, int ny) {
         return nx < 0 || nx >= width || ny < 0 || ny >= length;
