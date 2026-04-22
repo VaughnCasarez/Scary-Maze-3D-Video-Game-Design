@@ -16,6 +16,7 @@ public class WaterGun : MonoBehaviour
         Quaternion bulletRotation = Quaternion.LookRotation(direction.normalized) * Quaternion.Euler(90f, 0f, 0f);
         GameObject b = Instantiate(bullet, shootPoint.position, bulletRotation);
         b.GetComponent<Rigidbody>().linearVelocity = speed * direction.normalized;
+        b.transform.SetParent(null);
         flash.Play();
     }
 }

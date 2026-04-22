@@ -371,13 +371,13 @@ public class MazeGeneration : MonoBehaviour
                     Debug.Log(player == null);
                 } else if (row == goalX && col == length - 1)
                 {
-                    GameObject curGround = Instantiate(grass_prefab,  new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    GameObject curGround = Instantiate(grass_prefab,  new Vector3 (row, 0f, col), Quaternion.LookRotation(Vector3.forward));
                     curGround.name = "[" + row + ", " + col + "]";
                     curGround.transform.SetParent(this.gameObject.transform); 
                     curGround.layer = 3;
                     
                     curGround.transform.localScale = new Vector3 (tileSize, 1f, tileSize);
-                    Vector3 pos = new Vector3(row, 0.5f, col - tileSize * 0.5f); //tile center
+                    Vector3 pos = new Vector3(row, 0f, col - tileSize * 0.5f); //tile center
                     GameObject gate = Instantiate(gate_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                     winBox = gate.transform.Find("win box").gameObject;
                     placed_object_positions.Add(coords);

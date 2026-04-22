@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System;
+using UnityEngine.VFX;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour
     private bool paused = false;
     private MazeGeneration maze;
     private HUDManager hud;
+    private VisualEffect beam;
+    private ParticleSystem particles;
 
     void Start()
     {
@@ -32,9 +35,13 @@ public class GameManager : MonoBehaviour
         maze.player.GetComponent<PlayerControl>().BulletGained += OnBulletGain;
         maze.player.GetComponent<PlayerControl>().BulletUsed += OnBulletUsed;
         maze.winBox.GetComponent<WinDetection>().GameWon += OnWin;
+        beam = maze.winBox.GetComponentInChildren<VisualEffect>();
+        particles = maze.winBox.GetComponentInChildren<ParticleSystem>();
         maze.key.GetComponent<Key>().KeyCollected += OnKeyCollect;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        beam.Stop();
+        particles.Stop();
     }
 
     void FixedUpdate()
@@ -70,6 +77,9 @@ public class GameManager : MonoBehaviour
     }
     void OnKeyCollect()
     {
+        beam.Reinit();
+        beam.Play();
+        particles.Play();
         hud.UpdateGoal();
     }
 
