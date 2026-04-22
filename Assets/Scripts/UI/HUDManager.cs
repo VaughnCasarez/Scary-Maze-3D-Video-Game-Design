@@ -6,7 +6,9 @@ public class HUDManager : MonoBehaviour
 {
     [Header("Control Variables")]
     [SerializeField] private TextMeshProUGUI timerText; 
+    [SerializeField] private TextMeshProUGUI goalText; 
     [SerializeField] private GameObject[] healthBars; 
+    [SerializeField] private GameObject[] bulletIcons; 
     [SerializeField] private GameObject hud; 
     [SerializeField] private GameObject pauseMenu; 
 
@@ -19,6 +21,24 @@ public class HUDManager : MonoBehaviour
     public void DecreaseHealth(int health)
     {
         healthBars[health].SetActive(false);
+    }
+    public void IncreaseHealth(int health)
+    {
+        healthBars[health - 1].SetActive(true);
+    }
+
+    public void DecreaseBullets(int bullets)
+    {
+        bulletIcons[bullets].SetActive(false);
+    }
+    public void IncreaseBullets(int bullets)
+    {
+        bulletIcons[bullets - 1].SetActive(true);
+    }
+
+    public void UpdateGoal()
+    {
+        goalText.text = "Key Collected! Now Escape!";
     }
 
     public void PauseMenu(bool isOpen)

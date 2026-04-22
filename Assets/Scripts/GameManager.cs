@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System;
+using UnityEngine.VFX;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GameManager : MonoBehaviour
     private bool paused = false;
     private MazeGeneration maze;
     private HUDManager hud;
+    private VisualEffect beam;
+    private ParticleSystem particles;
 
     void Start()
     {
@@ -28,9 +31,17 @@ public class GameManager : MonoBehaviour
         maze.player.GetComponent<PlayerControl>().PlayerDeath += OnLoss;
         maze.player.GetComponent<PlayerControl>().PlayerDamage += OnDamage;
         maze.player.GetComponent<PlayerControl>().PausePressed += OnPausePressed;
+        maze.player.GetComponent<PlayerControl>().PlayerHeal += OnHeal;
+        maze.player.GetComponent<PlayerControl>().BulletGained += OnBulletGain;
+        maze.player.GetComponent<PlayerControl>().BulletUsed += OnBulletUsed;
         maze.winBox.GetComponent<WinDetection>().GameWon += OnWin;
+        beam = maze.winBox.GetComponentInChildren<VisualEffect>();
+        particles = maze.winBox.GetComponentInChildren<ParticleSystem>();
+        maze.key.GetComponent<Key>().KeyCollected += OnKeyCollect;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        beam.Stop();
+        particles.Stop();
     }
 
     void FixedUpdate()
@@ -46,6 +57,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void GainTime(float seconds)
+    {
+        timeRemaining += seconds;
+    }
+
     public void OnPausePressed()
     {
         paused = !paused;
@@ -59,11 +75,32 @@ public class GameManager : MonoBehaviour
             LockCursor();
         }
     }
+    void OnKeyCollect()
+    {
+        beam.Reinit();
+        beam.Play();
+        particles.Play();
+        hud.UpdateGoal();
+    }
 
     void OnDamage(int health)
     {
         hud.DecreaseHealth(health);
     }
+    void OnHeal(int health)
+    {
+        hud.IncreaseHealth(health);
+    }
+
+    void OnBulletGain(int bullet)
+    {
+        hud.IncreaseBullets(bullet);
+    }
+    void OnBulletUsed(int bullet)
+    {
+        hud.DecreaseBullets(bullet);
+    }
+
     void OnWin()
     {
         UnlockCursor();

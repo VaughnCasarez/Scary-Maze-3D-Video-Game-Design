@@ -5,6 +5,7 @@ public class SceneManager : MonoBehaviour
     public string game_scene_name;
     public string main_menu_scene_name;
     public GameObject instruction_panel;
+    public GameObject credits_panel;
     public GameObject main_menu;
     public string win_lose_scene_name;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -37,6 +38,30 @@ public class SceneManager : MonoBehaviour
     public void LoadInstructionScene()
     {
         ShowInstructionPanel();
+    }
+    
+    public void ShowCreditsPanel()
+    {
+        if (credits_panel != null)
+        {
+            credits_panel.SetActive(true);
+        }
+        if (main_menu != null)
+        {
+            main_menu.SetActive(false);
+        }
+    }
+
+    public void HideCreditsPanel()
+    {
+        if (credits_panel != null)
+        {
+            credits_panel.SetActive(false);
+        }
+        if (main_menu != null)
+        {
+            main_menu.SetActive(true);
+        }
     }
 
     public void ShowInstructionPanel()

@@ -55,15 +55,24 @@ MonoBehaviour:
   key_chance: 0.005
   pumpkin_chance: 0.05
   scarecrow_chance: 0.05
+  candy_chance: 0.005
   maxPumpkins: 3
   maxScarecrows: 1
+  minSpacingDistance: 5
   floor: {fileID: 4325341918426565251}
+  grass_prefab: {fileID: 6496799340054847938, guid: 9583d2e3d2a4e4b499d2d7c5c4460a87, type: 3}
+  corn_prefab: {fileID: 3072634001207192425, guid: 330f35be2cc30384790e4e9cde29274b, type: 3}
+  corn_with_lantern_prefab: {fileID: 3072634001207192425, guid: 6bebbc6d5e01a0c49adda26f11050c0f, type: 3}
   key_prefab: {fileID: 8784307974499645974, guid: 97637310df45eac46b12e6857cab60c0, type: 3}
   gate_prefab: {fileID: 658089914252131974, guid: 2d9d7c32981e7f84ab08e8eff8d47245, type: 3}
   player_prefab: {fileID: 5455520029652980035, guid: defa906985d1400488f65c785ae0b4e6, type: 3}
   pumpkin_prefab: {fileID: 4249628757518167691, guid: 986d20c9620832441bfb04fe5f3e2e07, type: 3}
+  timer_candy_prefab: {fileID: 7804553374603905491, guid: 9b5e51363b9bb864b900b30116c04c86, type: 3}
+  extra_life_candy_prefab: {fileID: 1742485428813559723, guid: 49e29ce6c4e0b0842aba4676e64a4b9f, type: 3}
+  bullet_reload_candy_prefab: {fileID: 2256624337092560441, guid: da99f992cca36b84180b486783eec742, type: 3}
   scarecrow_prefab: {fileID: 7142822975937438967, guid: 3d23a39973d034f48ae46197fa1b1871, type: 3}
-  num_rooms: 0
+  winBox: {fileID: 0}
+  player: {fileID: 0}
 --- !u!114 &421391007354724878
 MonoBehaviour:
   m_ObjectHideFlags: 0

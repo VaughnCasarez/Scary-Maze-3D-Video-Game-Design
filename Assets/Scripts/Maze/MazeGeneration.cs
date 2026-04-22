@@ -21,6 +21,7 @@ public class MazeGeneration : MonoBehaviour
     [SerializeField] private float key_chance = 0.005f;
     [SerializeField] private float pumpkin_chance = 0.05f;
     [SerializeField] private float scarecrow_chance = 0.05f;
+    [SerializeField] private float candy_chance = 0.005f;
     [SerializeField] private int maxPumpkins = 3;
     [SerializeField] private int maxScarecrows = 3;
     [SerializeField] private float minSpacingDistance = 5f;
@@ -29,19 +30,27 @@ public class MazeGeneration : MonoBehaviour
     [SerializeField] private GameObject floor;
     [SerializeField] private GameObject grass_prefab;
     [SerializeField] private GameObject corn_prefab;
+    [SerializeField] private GameObject corn_with_lantern_prefab;
     [SerializeField] private GameObject key_prefab;
     [SerializeField] private GameObject gate_prefab;
     [SerializeField] private GameObject player_prefab;
     [SerializeField] private GameObject pumpkin_prefab;
+    [SerializeField] private GameObject timer_candy_prefab;
+    [SerializeField] private GameObject extra_life_candy_prefab;
+    [SerializeField] private GameObject bullet_reload_candy_prefab;
     [SerializeField] private GameObject scarecrow_prefab;
     public GameObject winBox;
     public GameObject player;
+    public GameObject key;
     #region book-keeping
     private int[,] floor_map;
     private Dictionary<int, List<int[]>> room_assignments;
     private List<int[]> placed_object_positions;
     private int num_rooms;
     private bool keyNotPlaced = true;
+    private bool timerCandyPlaced = false;
+    private bool lifeCandyPlaced = false;
+    private bool bulletCandyPlaced = false;
     private int numPumpkins = 0;
     private int numScarecrows = 0;
     public Action MazeGenerated;
@@ -233,23 +242,48 @@ public class MazeGeneration : MonoBehaviour
         }
     }
     
-    //connect walls between empty rooms
-    private void BreakWalls() {
-        //we connect all rooms to the largst room
+    //connect walls between empty rooms until all rooms are accessible
+    private void BreakWalls()
+    {
+        // Keep reconnecting until there's only one room left
+        var dfs = RunDFS();
+        room_assignments = dfs.Groups;
+        num_rooms = dfs.RoomCount;
+
         int largestRoom = GetLargestRoom();
-        for (int i = 0; i <= room_assignments.Count; i++) {
-            if (!room_assignments.ContainsKey(i) || i == largestRoom) {
-                continue;
+        int maxIterations = width * length; 
+        int iter = 0;
+
+        while (num_rooms > 1 && iter++ < maxIterations)
+        {
+            largestRoom = GetLargestRoom();
+
+            // Find any room that isn't the largest
+            int targetRoom = -1;
+            foreach (var room in room_assignments)
+            {
+                if (room.Key <= 0 || room.Key == largestRoom) {
+                    continue;
+                }
+                if (room.Value.Count > 0) {
+                    targetRoom = room.Key; 
+                    break; 
+                }
             }
-            //select a random cell from the largest room b/c idk nearest neighbor algorithms
-            int randomSourceIndex = UnityEngine.Random.Range(0, room_assignments[largestRoom].Count);
-            int[] source = room_assignments[largestRoom][randomSourceIndex];
-            //select a random cell from the room we're connecting to
-            int randomTargetIndex = UnityEngine.Random.Range(0, room_assignments[i].Count);
-            int[] target = room_assignments[i][randomTargetIndex];
-            room_assignments[i].Remove(target); //remove this cell so we don't select it later
-            //"blast open walls"
+            if (targetRoom == -1) {
+                break;
+            }
+
+            // Pick random cells from each and carve between them
+            int[] source = room_assignments[largestRoom][UnityEngine.Random.Range(0, room_assignments[largestRoom].Count)];
+            int[] target = room_assignments[targetRoom][UnityEngine.Random.Range(0, room_assignments[targetRoom].Count)];
+
             CarveHallway(source, target);
+
+            // Re-run DFS so room_assignments reflects the carved path
+            dfs = RunDFS();
+            room_assignments = dfs.Groups;
+            num_rooms = dfs.RoomCount;
         }
     }
     private int GetLargestRoom() {
@@ -268,42 +302,41 @@ public class MazeGeneration : MonoBehaviour
     }
 
     //"blast open walls" by carving an L-shaped path
-    private void CarveHallway(int[] source, int[] target) {
-        int endX = target[0];
-        //if the target is further left, carve to the left
-        if (target[0] - source[0] < 0) {
-            for (int x = source[0]; x >= target[0]; x--) {
-                room_assignments[floor_map[x, source[1]]].Remove(new int[] {x, source[1]});
-                floor_map[x, source[1]] = floor_map[source[0], source[1]];
-                room_assignments[floor_map[source[0], source[1]]].Add(new int[] {x, source[1]});
+    private void CarveHallway(int[] source, int[] target)
+    {
+        //where are we starting
+        int x = source[0];
+        int y = source[1];
+        //where are we ending
+        int tx = target[0];
+        int ty = target[1];
+
+        int stepX = (tx > x) ? 1 : -1;
+        //horizontal cut
+        while (x != tx)
+        {   
+            //mark the current square as floor
+            if (floor_map[x, y] == -1) {
+                floor_map[x, y] = 0; 
             }
-        } 
-        //otherwise, carve to the right
-        else {
-             for (int x = source[0]; x <= target[0]; x++) {
-                room_assignments[floor_map[x, source[1]]].Remove(new int[] {x, source[1]});
-                floor_map[x, source[1]] = floor_map[source[0], source[1]];
-                room_assignments[floor_map[source[0], source[1]]].Add(new int[] {x, source[1]});
-            }
+            x += stepX;
         }
-        //if the target is further down, carve down
-        if (target[1] - source[1] < 0) {
-            for (int y = source[1]; y >= target[1]; y--) {
-                room_assignments[floor_map[endX, y]].Remove(new int[] {endX, y});
-                floor_map[endX, y] = floor_map[source[0], source[1]];
-                room_assignments[floor_map[source[0], source[1]]].Add(new int[] {endX, y});
-            }
-        } 
-        //otherwise, carve upwards
-        else {
-            for (int y = source[1]; y <= target[1]; y++) {
-                room_assignments[floor_map[endX, y]].Remove(new int[] {endX, y});
-                floor_map[endX, y] = floor_map[source[0], source[1]];
-                room_assignments[floor_map[source[0], source[1]]].Add(new int[] {endX, y});
-            }
+
+        //vertical cut
+        int stepY = (ty > y) ? 1 : -1;
+        while (y != ty)
+        {  
+            //mark the current square as floor
+            if (floor_map[x, y] == -1)
+                floor_map[x, y] = 0;
+            y += stepY;
+        }
+
+        //mark the start as floor
+        if (floor_map[x, y] == -1) {
+            floor_map[x, y] = 0;
         }
     }
-
 
     private bool OutOfBounds(int nx, int ny) {
         return nx < 0 || nx >= width || ny < 0 || ny >= length;
@@ -338,13 +371,13 @@ public class MazeGeneration : MonoBehaviour
                     Debug.Log(player == null);
                 } else if (row == goalX && col == length - 1)
                 {
-                    GameObject curGround = Instantiate(grass_prefab,  new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    GameObject curGround = Instantiate(grass_prefab,  new Vector3 (row, 0f, col), Quaternion.LookRotation(Vector3.forward));
                     curGround.name = "[" + row + ", " + col + "]";
                     curGround.transform.SetParent(this.gameObject.transform); 
                     curGround.layer = 3;
                     
                     curGround.transform.localScale = new Vector3 (tileSize, 1f, tileSize);
-                    Vector3 pos = new Vector3(row, 0.5f, col - tileSize * 0.5f); //tile center
+                    Vector3 pos = new Vector3(row, 0f, col - tileSize * 0.5f); //tile center
                     GameObject gate = Instantiate(gate_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                     winBox = gate.transform.Find("win box").gameObject;
                     placed_object_positions.Add(coords);
@@ -352,7 +385,14 @@ public class MazeGeneration : MonoBehaviour
                 }
                 
                 if (floor_map[row, col] == -1) {
-                    GameObject curCorn = Instantiate(corn_prefab, new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    GameObject curCorn;
+                    if ((row == 0 && col % 10 == 0) || (row % 10 == 0 && col == 0))
+                    {
+                        curCorn = Instantiate(corn_with_lantern_prefab, new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    } else
+                    {
+                        curCorn = Instantiate(corn_prefab, new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    }
                     curCorn.name = "[" + row + ", " + col + "]";
                     curCorn.transform.SetParent(this.gameObject.transform); 
                     curCorn.layer = 3;
@@ -371,10 +411,14 @@ public class MazeGeneration : MonoBehaviour
                     }
                     if (keyNotPlaced && UnityEngine.Random.Range(0, 1f) < key_chance) {
                         Vector3 pos = new Vector3(row + tileSize, 1f, col + tileSize); //tile center
-                        Instantiate(key_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                        key = Instantiate(key_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                         placed_object_positions.Add(coords);
                         keyNotPlaced = false;
-                    } else if (numPumpkins < maxPumpkins && UnityEngine.Random.Range(0, 1f) < pumpkin_chance)
+                    } else
+                    {
+                        key_chance *= 2f;
+                    }
+                    if (numPumpkins < maxPumpkins && UnityEngine.Random.Range(0, 1f) < pumpkin_chance)
                     {
                         Vector3 pos = new Vector3(row + tileSize * 0.5f, 0.75f, col + tileSize * 0.5f); //tile center
                         Instantiate(pumpkin_prefab, pos, Quaternion.LookRotation(Vector3.forward));
@@ -387,21 +431,24 @@ public class MazeGeneration : MonoBehaviour
                         Instantiate(scarecrow_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                         placed_object_positions.Add(coords);
                         numScarecrows++;
-                    }
+                    } else if (!lifeCandyPlaced && UnityEngine.Random.Range(0, 1f) < candy_chance) {
+                        Vector3 pos = new Vector3(row + tileSize, 1.25f, col + tileSize); //tile center
+                        Instantiate(extra_life_candy_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                        placed_object_positions.Add(coords);
+                        lifeCandyPlaced = true;
+                    } else if (!timerCandyPlaced && UnityEngine.Random.Range(0, 1f) < candy_chance) {
+                        Vector3 pos = new Vector3(row + tileSize, 1.25f, col + tileSize); //tile center
+                        Instantiate(timer_candy_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                        placed_object_positions.Add(coords);
+                        timerCandyPlaced = true;
+                    } else if (!bulletCandyPlaced && UnityEngine.Random.Range(0, 1f) < candy_chance) {
+                        Vector3 pos = new Vector3(row + tileSize, 1.25f, col + tileSize); //tile center
+                        Instantiate(bullet_reload_candy_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                        placed_object_positions.Add(coords);
+                        bulletCandyPlaced = true;
+                    } 
                 }
             }
-        }
-        if (keyNotPlaced)
-        {
-            int row = width / 2;
-            int col = length / 2;
-            int[] coords = new int[2];
-            coords[0] = row;
-            coords[1] = col;
-            Vector3 pos = new Vector3(row + tileSize, 1f, col + tileSize); //tile center
-            Instantiate(key_prefab, pos, Quaternion.LookRotation(Vector3.forward));
-            placed_object_positions.Add(coords);
-            keyNotPlaced = false;
         }
     } 
 
