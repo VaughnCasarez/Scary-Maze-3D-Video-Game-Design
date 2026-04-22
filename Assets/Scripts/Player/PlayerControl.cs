@@ -6,11 +6,14 @@ using TMPro;
 [RequireComponent(typeof(AudioSource))]
 public class PlayerControl : MonoBehaviour
 {
+    [Header("Controls")]
     [SerializeField] public float moveSpeed = 5f;
     [Range(1f, 30f)] public float turnSpeed = 8f;
+    [SerializeField] public int maxBullets = 3;
     public float shootSpeed = 10f;
     [SerializeField] private int playerHealth = 5;
     private float nextDamageTime = 0f;
+    private int curBullets;
 
     [Header("Audio")]
     [SerializeField] private AudioClip walkSound;
@@ -31,9 +34,11 @@ public class PlayerControl : MonoBehaviour
     private bool isCrouching = false;
 
     public bool inKeyRange;
+    public bool inCandyRange;
     public bool hasKey;
     private WaterGun gun;
     private Key key;
+    public Candy curCandy;
     private AudioSource playerAudioSource;
     private AudioSource backgroundAudioSource;
     private bool isWalkSoundPlaying;
@@ -41,6 +46,9 @@ public class PlayerControl : MonoBehaviour
     private Animator anim;
     public Action PlayerDeath;
     public Action<int> PlayerDamage;
+    public Action<int> PlayerHeal;
+    public Action<int> BulletUsed;
+    public Action<int> BulletGained;
     public Action PausePressed;
     void Start()
     {
@@ -48,6 +56,7 @@ public class PlayerControl : MonoBehaviour
         anim.SetBool("isWalking", false);
         gun = transform.Find("gun").GetComponent<WaterGun>();
         key = GameObject.FindWithTag("Key").GetComponent<Key>();
+        curBullets = maxBullets;
 
         playerAudioSource = GetComponent<AudioSource>();
         if (playerAudioSource == null)
@@ -101,8 +110,10 @@ public class PlayerControl : MonoBehaviour
         float mouseX = Mouse.current.delta.ReadValue().x * 0.1f;
         transform.Rotate(Vector3.up * mouseX * turnSpeed * Time.deltaTime);
 
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if (Mouse.current.leftButton.wasPressedThisFrame && curBullets > 0)
         {
+            curBullets -= 1;
+            BulletUsed?.Invoke(curBullets);
             gun.Shoot(shootSpeed, transform.forward);
             PlayShootSound();
         }
@@ -110,6 +121,10 @@ public class PlayerControl : MonoBehaviour
         {
             key.CollectKey();
             hasKey = true;
+        }
+        if (inCandyRange && Keyboard.current.eKey.wasReleasedThisFrame)
+        {
+            curCandy.CollectCandy(this);
         }
 
         float currentSpeed = isSprinting ? 10f : isCrouching ? 1f : moveSpeed;
@@ -192,6 +207,18 @@ public class PlayerControl : MonoBehaviour
         }
 
         playerAudioSource.PlayOneShot(hurtSound, hurtVolume);
+    }
+
+    public void GainHealth(int num)
+    {
+        playerHealth += num;
+        PlayerHeal?.Invoke(playerHealth);
+    }
+
+    public void GainBullet(int num)
+    {
+        curBullets += num;
+        BulletGained?.Invoke(curBullets);
     }
 
     // public static void UnlockCursor()

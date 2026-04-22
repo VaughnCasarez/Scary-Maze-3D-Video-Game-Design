@@ -21,6 +21,7 @@ public class MazeGeneration : MonoBehaviour
     [SerializeField] private float key_chance = 0.005f;
     [SerializeField] private float pumpkin_chance = 0.05f;
     [SerializeField] private float scarecrow_chance = 0.05f;
+    [SerializeField] private float candy_chance = 0.005f;
     [SerializeField] private int maxPumpkins = 3;
     [SerializeField] private int maxScarecrows = 3;
     [SerializeField] private float minSpacingDistance = 5f;
@@ -29,10 +30,14 @@ public class MazeGeneration : MonoBehaviour
     [SerializeField] private GameObject floor;
     [SerializeField] private GameObject grass_prefab;
     [SerializeField] private GameObject corn_prefab;
+    [SerializeField] private GameObject corn_with_lantern_prefab;
     [SerializeField] private GameObject key_prefab;
     [SerializeField] private GameObject gate_prefab;
     [SerializeField] private GameObject player_prefab;
     [SerializeField] private GameObject pumpkin_prefab;
+    [SerializeField] private GameObject timer_candy_prefab;
+    [SerializeField] private GameObject extra_life_candy_prefab;
+    [SerializeField] private GameObject bullet_reload_candy_prefab;
     [SerializeField] private GameObject scarecrow_prefab;
     public GameObject winBox;
     public GameObject player;
@@ -42,6 +47,9 @@ public class MazeGeneration : MonoBehaviour
     private List<int[]> placed_object_positions;
     private int num_rooms;
     private bool keyNotPlaced = true;
+    private bool timerCandyPlaced = false;
+    private bool lifeCandyPlaced = false;
+    private bool bulletCandyPlaced = false;
     private int numPumpkins = 0;
     private int numScarecrows = 0;
     public Action MazeGenerated;
@@ -352,7 +360,14 @@ public class MazeGeneration : MonoBehaviour
                 }
                 
                 if (floor_map[row, col] == -1) {
-                    GameObject curCorn = Instantiate(corn_prefab, new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    GameObject curCorn;
+                    if ((row == 0 && col % 10 == 0) || (row % 10 == 0 && col == 0))
+                    {
+                        curCorn = Instantiate(corn_with_lantern_prefab, new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    } else
+                    {
+                        curCorn = Instantiate(corn_prefab, new Vector3 (row, tileSize / 2f, col), Quaternion.LookRotation(Vector3.forward));
+                    }
                     curCorn.name = "[" + row + ", " + col + "]";
                     curCorn.transform.SetParent(this.gameObject.transform); 
                     curCorn.layer = 3;
@@ -387,7 +402,22 @@ public class MazeGeneration : MonoBehaviour
                         Instantiate(scarecrow_prefab, pos, Quaternion.LookRotation(Vector3.forward));
                         placed_object_positions.Add(coords);
                         numScarecrows++;
-                    }
+                    } else if (!lifeCandyPlaced && UnityEngine.Random.Range(0, 1f) < candy_chance) {
+                        Vector3 pos = new Vector3(row + tileSize, 1.25f, col + tileSize); //tile center
+                        Instantiate(extra_life_candy_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                        placed_object_positions.Add(coords);
+                        lifeCandyPlaced = true;
+                    } else if (!timerCandyPlaced && UnityEngine.Random.Range(0, 1f) < candy_chance) {
+                        Vector3 pos = new Vector3(row + tileSize, 1.25f, col + tileSize); //tile center
+                        Instantiate(timer_candy_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                        placed_object_positions.Add(coords);
+                        timerCandyPlaced = true;
+                    } else if (!bulletCandyPlaced && UnityEngine.Random.Range(0, 1f) < candy_chance) {
+                        Vector3 pos = new Vector3(row + tileSize, 1.25f, col + tileSize); //tile center
+                        Instantiate(bullet_reload_candy_prefab, pos, Quaternion.LookRotation(Vector3.forward));
+                        placed_object_positions.Add(coords);
+                        bulletCandyPlaced = true;
+                    } 
                 }
             }
         }

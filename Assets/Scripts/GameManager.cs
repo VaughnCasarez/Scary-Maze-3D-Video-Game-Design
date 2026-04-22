@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
         maze.player.GetComponent<PlayerControl>().PlayerDeath += OnLoss;
         maze.player.GetComponent<PlayerControl>().PlayerDamage += OnDamage;
         maze.player.GetComponent<PlayerControl>().PausePressed += OnPausePressed;
+        maze.player.GetComponent<PlayerControl>().PlayerHeal += OnHeal;
+        maze.player.GetComponent<PlayerControl>().BulletGained += OnBulletGain;
+        maze.player.GetComponent<PlayerControl>().BulletUsed += OnBulletUsed;
         maze.winBox.GetComponent<WinDetection>().GameWon += OnWin;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -44,6 +47,11 @@ public class GameManager : MonoBehaviour
                 OnLoss();
             }
         }
+    }
+
+    public void GainTime(float seconds)
+    {
+        timeRemaining += seconds;
     }
 
     public void OnPausePressed()
@@ -64,6 +72,20 @@ public class GameManager : MonoBehaviour
     {
         hud.DecreaseHealth(health);
     }
+    void OnHeal(int health)
+    {
+        hud.IncreaseHealth(health);
+    }
+
+    void OnBulletGain(int bullet)
+    {
+        hud.IncreaseBullets(bullet);
+    }
+    void OnBulletUsed(int bullet)
+    {
+        hud.DecreaseBullets(bullet);
+    }
+
     void OnWin()
     {
         UnlockCursor();
