@@ -44,6 +44,11 @@ public class JackOLanternAI : MonoBehaviour
             victim.y = transform.position.y;
 
             agent.SetDestination(victim);
+
+            Vector3 direction = (victim - transform.position).normalized;
+            if (direction != Vector3.zero) {
+                transform.rotation = Quaternion.LookRotation(direction);
+            }
             //transform.position = Vector3.MoveTowards(transform.position, victim, movementSpeed * Time.deltaTime);
         }
         else

@@ -1701,8 +1701,16 @@ PrefabInstance:
       value: grass
       objectReference: {fileID: 0}
     - target: {fileID: 6826692026212039470, guid: 9583d2e3d2a4e4b499d2d7c5c4460a87, type: 3}
+      propertyPath: m_Size.x
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826692026212039470, guid: 9583d2e3d2a4e4b499d2d7c5c4460a87, type: 3}
       propertyPath: m_Size.y
       value: 12.658173
+      objectReference: {fileID: 0}
+    - target: {fileID: 6826692026212039470, guid: 9583d2e3d2a4e4b499d2d7c5c4460a87, type: 3}
+      propertyPath: m_Size.z
+      value: 1.1
       objectReference: {fileID: 0}
     - target: {fileID: 6826692026212039470, guid: 9583d2e3d2a4e4b499d2d7c5c4460a87, type: 3}
       propertyPath: m_Center.y
