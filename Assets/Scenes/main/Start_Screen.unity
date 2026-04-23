@@ -1663,7 +1663,7 @@ GameObject:
   - component: {fileID: 255951277}
   - component: {fileID: 255951276}
   m_Layer: 5
-  m_Name: names
+  m_Name: licenses
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1685,7 +1685,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -34.375}
+  m_AnchoredPosition: {x: 0, y: -60}
   m_SizeDelta: {x: 250, y: 183}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &255951276
@@ -1712,7 +1712,8 @@ MonoBehaviour:
     Standard EULA\nCreepster font \u2014 Sideshow / Font Diner, Inc \u2014 SIL Open
     Font License 1.1\nJolly Lodger font \u2014 Font Diner \u2014 SIL Open Font License
     1.1\nFree Quick Effects Vol. 1 \u2014 Gabriel Aguiar Prod. \u2014 Unity Asset
-    Store Standard EULA"
+    Store Standard EULA\nSound effects \u2014 various contributors \u2014 via Pixabay
+    \u2014 Pixabay Content License (no attribution required)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e35a71c727b7b6342b9ce17c21b96682, type: 2}
   m_sharedMaterial: {fileID: -7524211566244382382, guid: e35a71c727b7b6342b9ce17c21b96682, type: 2}
